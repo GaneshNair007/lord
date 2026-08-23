@@ -1784,10 +1784,13 @@
   // app.js
   var App = class {
     constructor() {
-      this.activeView = "landing";
       this.activeMode = "opportunities";
+      this.activeView = "landing";
       this.topBar = null;
-      this.currentViewInstance = null;
+      this.landingView = null;
+      this.mapView = null;
+      this.pipelineView = null;
+      this.aboutView = null;
       this.init();
     }
     init() {
@@ -1795,13 +1798,31 @@
         window.addEventListener("error", (e) => {
           console.error("Signal Atlas Runtime Exception:", e);
         });
+        const mainMount = document.getElementById("main-mount");
+        if (mainMount) {
+          mainMount.innerHTML = `
+          <div id="section-landing" class="min-h-screen relative border-b border-[#1F2937]/50"></div>
+          <div id="section-map" class="min-h-screen relative border-b border-[#1F2937]/50 py-8"></div>
+          <div id="section-pipeline" class="min-h-screen relative border-b border-[#1F2937]/50 py-8"></div>
+          <div id="section-about" class="min-h-screen relative py-8"></div>
+        `;
+          this.landingView = new LandingView("section-landing", {
+            onNavigate: (targetView, targetMode) => this.scrollToSection(targetView, targetMode)
+          });
+          this.mapView = new MapDashboardView("section-map", {
+            activeMode: this.activeMode,
+            onNavigate: (targetView, targetMode) => this.scrollToSection(targetView, targetMode)
+          });
+          this.pipelineView = new PipelineHealthView("section-pipeline");
+          this.aboutView = new AboutView("section-about");
+        }
         this.topBar = new TopBar("topbar-mount", {
-          activeView: this.activeView,
+          activeView: "landing",
           activeMode: this.activeMode,
-          onViewChange: (view) => this.navigate(view),
+          onViewChange: (view) => this.scrollToSection(view),
           onModeChange: (mode) => this.setMode(mode)
         });
-        this.navigate(this.activeView);
+        this.initScrollSpy();
         window.addEventListener("keydown", (e) => {
           if (e.key === "Escape") {
             const backdrop = document.getElementById("drawer-backdrop");
@@ -1810,15 +1831,15 @@
         });
       } catch (err) {
         console.error("App Initialization Error:", err);
-        const mount = document.getElementById("main-mount");
-        if (mount) {
-          mount.innerHTML = `
-          <div class="p-8 text-center text-red-400 bg-red-950/20 border border-red-500/30 m-6 rounded-2xl">
-            <h2 class="text-lg font-bold">Signal Atlas UI Runtime Error</h2>
-            <p class="text-xs mt-2 font-mono">${err.message}</p>
-          </div>
-        `;
-        }
+      }
+    }
+    scrollToSection(view, mode = null) {
+      if (mode) {
+        this.setMode(mode);
+      }
+      const targetEl = document.getElementById(`section-${view}`);
+      if (targetEl) {
+        targetEl.scrollIntoView({ behavior: "smooth" });
       }
     }
     setMode(mode) {
@@ -1826,38 +1847,33 @@
       if (this.topBar) {
         this.topBar.update(this.activeView, this.activeMode);
       }
-      if (this.currentViewInstance && typeof this.currentViewInstance.setMode === "function") {
-        this.currentViewInstance.setMode(mode);
+      if (this.mapView && typeof this.mapView.setMode === "function") {
+        this.mapView.setMode(mode);
       }
     }
-    navigate(view, mode = null) {
-      if (mode) {
-        this.activeMode = mode;
-      }
-      this.activeView = view;
-      if (this.topBar) {
-        this.topBar.update(this.activeView, this.activeMode);
-      }
-      if (this.currentViewInstance && typeof this.currentViewInstance.destroy === "function") {
-        this.currentViewInstance.destroy();
-      }
-      const mainMount = document.getElementById("main-mount");
-      if (!mainMount) return;
-      if (view === "landing") {
-        this.currentViewInstance = new LandingView("main-mount", {
-          onNavigate: (targetView, targetMode) => this.navigate(targetView, targetMode)
+    initScrollSpy() {
+      const sections = [
+        { id: "section-landing", name: "landing" },
+        { id: "section-[#section-landing]", name: "landing" },
+        { id: "section-map", name: "map" },
+        { id: "section-pipeline", name: "pipeline" },
+        { id: "section-about", name: "about" }
+      ];
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const matched = sections.find((s) => s.id === entry.target.id);
+            if (matched && this.topBar) {
+              this.activeView = matched.name;
+              this.topBar.update(matched.name, this.activeMode);
+            }
+          }
         });
-      } else if (view === "map") {
-        this.currentViewInstance = new MapDashboardView("main-mount", {
-          activeMode: this.activeMode,
-          onNavigate: (targetView, targetMode) => this.navigate(targetView, targetMode)
-        });
-      } else if (view === "pipeline") {
-        this.currentViewInstance = new PipelineHealthView("main-mount");
-      } else if (view === "about") {
-        this.currentViewInstance = new AboutView("main-mount");
-      }
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      }, { threshold: 0.2 });
+      sections.forEach((s) => {
+        const el = document.getElementById(s.id);
+        if (el) observer.observe(el);
+      });
     }
   };
   document.addEventListener("DOMContentLoaded", () => {
