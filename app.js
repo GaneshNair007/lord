@@ -1,18 +1,12 @@
 /**
- * Signal Atlas — Main Orchestrator (Fully Scrollable Web Application)
+ * Signal Atlas — Main Orchestrator (About Page & Hero)
  */
 
-import { MapDashboardView } from './MapDashboardView.js';
-import { PipelineHealthView } from './PipelineHealthView.js';
 import { AboutView } from './AboutView.js';
 
 class App {
   constructor() {
-    this.activeMode = 'opportunities';
-    this.mapView = null;
-    this.pipelineView = null;
     this.aboutView = null;
-
     this.init();
   }
 
@@ -21,21 +15,6 @@ class App {
       window.addEventListener('error', (e) => {
         console.error("Signal Atlas Runtime Exception:", e);
       });
-
-      // Mount Map Section
-      const mapMount = document.getElementById('map-section-mount');
-      if (mapMount) {
-        this.mapView = new MapDashboardView('map-section-mount', {
-          activeMode: this.activeMode,
-          onNavigate: (targetView) => this.scrollToSection(targetView)
-        });
-      }
-
-      // Mount Pipeline Section
-      const pipelineMount = document.getElementById('pipeline-section-mount');
-      if (pipelineMount) {
-        this.pipelineView = new PipelineHealthView('pipeline-section-mount');
-      }
 
       // Mount About Section
       const aboutMount = document.getElementById('about-section-mount');
@@ -52,14 +31,6 @@ class App {
       // Navigation & ScrollSpy
       this.initNavigation();
       this.initScrollSpy();
-
-      // Keyboard accessibility
-      window.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-          const backdrop = document.getElementById('drawer-backdrop');
-          if (backdrop) backdrop.click();
-        }
-      });
 
     } catch (err) {
       console.error("App Initialization Error:", err);
@@ -97,16 +68,9 @@ class App {
     window.addEventListener('resize', resize);
     resize();
 
-    let mouse = { x: -1000, y: -1000 };
-    window.addEventListener('mousemove', (e) => {
-      mouse.x = e.clientX;
-      mouse.y = e.clientY;
-    });
-
     const animate = () => {
       ctx.clearRect(0, 0, width, height);
 
-      // Draw particle nodes & connecting lines
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
         p.x += p.vx;
@@ -172,7 +136,7 @@ class App {
   }
 
   initScrollSpy() {
-    const sections = ['scene-01', 'scene-02', 'scene-03', 'scene-04'];
+    const sections = ['scene-01', 'scene-02'];
     const navItems = document.querySelectorAll('.nav-link-item');
     const dots = document.querySelectorAll('.indicator-dot');
 

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PROJECT / ATLAS — Autonomous Intelligence Engine</title>
+  <title>PROJECT / ATLAS — About & Architecture</title>
 
   <!-- Google Fonts: Bodoni Moda (variable), Inter & Space Grotesk -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,14 +12,6 @@
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Leaflet CSS & JS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
-
-  <!-- D3.js v7 and TopoJSON v3 -->
-  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
-  <script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
 
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -34,9 +26,7 @@
 
     <nav class="nav-links" id="main-nav">
       <span class="nav-link-item active" data-target="scene-01">01. OVERVIEW</span>
-      <span class="nav-link-item" data-target="scene-02">02. CONVERGENCE MAP</span>
-      <span class="nav-link-item" data-target="scene-03">03. PIPELINE HEALTH</span>
-      <span class="nav-link-item" data-target="scene-04">04. ABOUT US</span>
+      <span class="nav-link-item" data-target="scene-02">02. ABOUT US</span>
     </nav>
 
     <div class="status-badge">
@@ -44,19 +34,17 @@
     </div>
   </header>
 
-  <!-- Fixed Right-Side Vertical Scene Indicator (4 Dots) -->
+  <!-- Fixed Right-Side Vertical Indicator (2 Dots) -->
   <div class="scene-indicator-bar" id="scene-indicator">
     <div class="indicator-dot active" data-target="scene-01" title="Scene 01: Overview"></div>
-    <div class="indicator-dot" data-target="scene-02" title="Scene 02: Convergence Map"></div>
-    <div class="indicator-dot" data-target="scene-03" title="Scene 03: Pipeline Health"></div>
-    <div class="indicator-dot" data-target="scene-04" title="Scene 04: About Us & Journey"></div>
+    <div class="indicator-dot" data-target="scene-02" title="Scene 02: About Us & Journey"></div>
   </div>
 
   <!-- Main Container -->
   <main class="scene-container" id="main-scroll-container">
 
     <!-- ==========================================
-         SCENE 01: 01. OVERVIEW (Clean Full-Screen Evolving Web Canvas)
+         SCENE 01: 01. OVERVIEW (Clean Hero Web Canvas)
          ========================================== -->
     <section class="scene-section" id="scene-01">
       
@@ -78,54 +66,15 @@
 
       <!-- Minimal Scroll Instruction -->
       <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 font-mono text-xs text-[#8A8A8A] tracking-[0.2em] uppercase animate-bounce cursor-pointer" onclick="document.getElementById('scene-02').scrollIntoView({behavior:'smooth'})">
-        SCROLL TO ENTER ↓
+        SCROLL FOR OUR STORY ↓
       </div>
     </section>
 
     <!-- ==========================================
-         SCENE 02: 02. CONVERGENCE MAP
+         SCENE 02: 02. ABOUT US & JOURNEY & TEAM
          ========================================== -->
-    <section class="scene-section" id="scene-02">
+    <section class="scene-section bg-[#070709]" id="scene-02">
       <div class="max-w-7xl mx-auto w-full px-4 lg:px-8 py-8">
-        <div class="flex flex-col md:flex-row items-start md:items-end justify-between gap-4 pb-4 border-b border-[#1F2937] mb-6">
-          <div>
-            <div class="font-mono text-xs text-[#E3262E] tracking-widest uppercase">SCENE 02 / REAL GEOGRAPHIC CONVERGENCE MAP</div>
-            <h2 class="font-serif font-extrabold text-2xl lg:text-4xl text-white uppercase">Nº 02 | CONVERGENCE MAP</h2>
-            <div class="font-mono text-xs text-[#8A8A8A] tracking-wider uppercase mt-1">Global Signal Flow and Pattern Verification</div>
-          </div>
-        </div>
-
-        <!-- Map Dashboard Mount Container -->
-        <div id="map-section-mount"></div>
-      </div>
-    </section>
-
-    <!-- ==========================================
-         SCENE 03: 03. PIPELINE HEALTH
-         ========================================== -->
-    <section class="scene-section bg-[#050505]" id="scene-03">
-      <div class="max-w-7xl mx-auto w-full px-4 lg:px-8 py-8">
-        <div class="text-center mb-8 space-y-2">
-          <div class="font-mono text-xs text-[#E3262E] tracking-widest uppercase">SCENE 03 / DOM DRIFT RECOVERY</div>
-          <h2 class="section-hero-title text-[#F5F5F5]">PIPELINE HEALTH.</h2>
-          <p class="font-mono text-xs text-[#8A8A8A]">Autonomous scraper health monitoring and LLM selector auto-healing</p>
-        </div>
-
-        <!-- Pipeline Mount Container -->
-        <div id="pipeline-section-mount"></div>
-      </div>
-    </section>
-
-    <!-- ==========================================
-         SCENE 04: 04. ABOUT US & JOURNEY & TEAM
-         ========================================== -->
-    <section class="scene-section bg-[#070709]" id="scene-04">
-      <div class="max-w-7xl mx-auto w-full px-4 lg:px-8 py-8">
-        <div class="text-center mb-8 space-y-2">
-          <div class="font-mono text-xs text-[#E3262E] tracking-widest uppercase">SCENE 04 / ARCHITECTURE & JOURNEY</div>
-          <h2 class="section-hero-title text-[#F5F5F5]">ABOUT SIGNAL ATLAS.</h2>
-        </div>
-
         <!-- About Mount Container -->
         <div id="about-section-mount"></div>
       </div>
@@ -141,9 +90,6 @@
       <span>ALL RIGHTS RESERVED</span>
     </div>
   </footer>
-
-  <!-- Drawer Container for Signal Details -->
-  <div id="drawer-container"></div>
 
   <!-- JS Bundle -->
   <script src="bundle.js"></script>
