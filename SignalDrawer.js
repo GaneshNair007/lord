@@ -1,6 +1,6 @@
 /**
- * Signal Atlas — Signal Drawer Component
- * Renders slide-over drawer (desktop) / bottom sheet (mobile) for clicked spatial markers.
+ * Signal Atlas — Signal Drawer Component (PROJECT / ATLAS Editorial Design System)
+ * Renders slide-over drawer for clicked spatial markers.
  */
 
 export class SignalDrawer {
@@ -36,49 +36,48 @@ export class SignalDrawer {
     }
 
     const isCivic = this.signal.id.startsWith('civic');
-    const accentColor = isCivic ? '#F59E0B' : '#22C55E';
-    const accentBg = isCivic ? 'bg-amber-500/10 border-amber-500/30 text-amber-400' : 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400';
+    const accentColor = isCivic ? '#F59E0B' : '#E3262E';
+    const accentBg = isCivic ? 'bg-amber-950/60 border-amber-500/40 text-amber-400' : 'bg-red-950/60 border-[#E3262E]/60 text-[#E3262E]';
 
     this.container.innerHTML = `
-      <div class="fixed inset-0 z-50 overflow-hidden">
+      <div class="fixed inset-0 z-50 overflow-hidden font-mono">
         
         <!-- Backdrop Overlay -->
-        <div id="drawer-backdrop" class="absolute inset-0 bg-black/70 backdrop-blur-sm drawer-overlay cursor-pointer"></div>
+        <div id="drawer-backdrop" class="absolute inset-0 bg-black/80 backdrop-blur-sm cursor-pointer"></div>
 
         <!-- Slide-Over Drawer Container -->
         <div class="fixed inset-y-0 right-0 max-w-full flex pl-10">
-          <div class="w-screen max-w-xl bg-[#141924] border-l border-[#1F2937] text-white flex flex-col shadow-2xl drawer-content">
+          <div class="w-screen max-w-xl bg-[#0A0A0C] border-l border-[#1F2937] text-white flex flex-col shadow-2xl">
             
             <!-- Drawer Header -->
-            <div class="p-6 bg-[#0A0E14] border-b border-[#1F2937] flex items-start justify-between">
-              <div class="space-y-1 pr-4">
+            <div class="p-6 bg-[#050505] border-b border-[#1F2937] flex items-start justify-between">
+              <div class="space-y-1.5 pr-4">
                 <div class="flex items-center space-x-2">
-                  <span class="px-2.5 py-0.5 rounded text-[11px] font-mono border ${accentBg}">
+                  <span class="px-2.5 py-0.5 text-[10px] font-mono border uppercase tracking-wider ${accentBg}">
                     ${isCivic ? 'Civic Issue · Seeded Data' : 'Opportunity Cluster'}
                   </span>
-                  <span class="text-xs text-[#94A3B8] font-mono">${this.signal.city}</span>
+                  <span class="text-xs text-[#8A8A8A] font-mono uppercase">${this.signal.city}</span>
                 </div>
-                <h3 class="text-xl font-bold text-white tracking-tight leading-snug">${this.signal.title}</h3>
+                <h3 class="font-serif text-xl font-bold text-white uppercase tracking-tight leading-snug">${this.signal.title}</h3>
               </div>
-              <button id="drawer-close-btn" class="p-2 rounded-lg text-[#94A3B8] hover:text-white hover:bg-[#1F2937] transition" aria-label="Close drawer">
+              <button id="drawer-close-btn" class="p-2 text-[#8A8A8A] hover:text-white hover:bg-[#1F2937] transition" aria-label="Close drawer">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
               </button>
             </div>
 
-            <!-- Emergence Score Badge + Gloss Banner (Section 2 Requirement) -->
-            <div class="p-4 bg-[#0F141C] border-b border-[#1F2937] flex items-center justify-between gap-4">
+            <!-- Emergence Score Badge + Gloss Banner -->
+            <div class="p-4 bg-[#050505] border-b border-[#1F2937] flex items-center justify-between gap-4">
               <div class="flex items-center space-x-3">
-                <div class="px-3.5 py-2 rounded-xl bg-[#141924] border border-[#1F2937] font-mono text-center">
-                  <div class="text-[10px] text-[#94A3B8] uppercase">S_emergence</div>
+                <div class="px-3.5 py-2 bg-[#0A0A0C] border border-[#1F2937] font-mono text-center">
+                  <div class="text-[10px] text-[#8A8A8A] uppercase">S_emergence</div>
                   <div class="text-xl font-extrabold" style="color: ${accentColor}">${this.signal.emergenceScore.toFixed(2)}</div>
                 </div>
                 <div>
-                  <div class="text-xs font-bold text-white flex items-center space-x-1.5">
-                    <span>Signal Velocity: <strong style="color: ${accentColor}">${this.signal.signalVelocity}</strong></span>
+                  <div class="text-xs font-bold text-white flex items-center space-x-1.5 font-mono">
+                    <span>SIGNAL VELOCITY: <strong style="color: ${accentColor}">${this.signal.signalVelocity}</strong></span>
                     <span class="text-[11px] font-mono text-emerald-400 font-semibold">${this.signal.scoreChange}</span>
                   </div>
-                  <!-- One-Line Plain-Language Gloss -->
-                  <div class="text-xs text-[#94A3B8] mt-0.5 italic">
+                  <div class="text-xs text-[#8A8A8A] mt-0.5 italic font-mono">
                     "${this.signal.confidenceGloss}"
                   </div>
                 </div>
@@ -86,35 +85,31 @@ export class SignalDrawer {
             </div>
 
             <!-- Navigation Tabs -->
-            <div class="flex border-b border-[#1F2937] bg-[#0A0E14] px-6 text-xs font-medium">
-              <button id="tab-overview" class="py-3 px-4 border-b-2 font-mono transition ${this.activeTab === 'overview' ? 'border-emerald-500 text-white font-bold' : 'border-transparent text-[#94A3B8] hover:text-white'}">
-                Overview &amp; Radar
+            <div class="flex border-b border-[#1F2937] bg-[#050505] px-6 text-xs font-mono">
+              <button id="tab-overview" class="py-3 px-4 border-b-2 uppercase transition ${this.activeTab === 'overview' ? 'border-[#E3262E] text-white font-bold' : 'border-transparent text-[#8A8A8A] hover:text-white'}">
+                Overview &amp; Metrics
               </button>
-              <button id="tab-sources" class="py-3 px-4 border-b-2 font-mono transition ${this.activeTab === 'sources' ? 'border-emerald-500 text-white font-bold' : 'border-transparent text-[#94A3B8] hover:text-white'}">
+              <button id="tab-sources" class="py-3 px-4 border-b-2 uppercase transition ${this.activeTab === 'sources' ? 'border-[#E3262E] text-white font-bold' : 'border-transparent text-[#8A8A8A] hover:text-white'}">
                 Sources (${this.signal.sources ? this.signal.sources.length : 0})
               </button>
-              <button id="tab-timeline" class="py-3 px-4 border-b-2 font-mono transition ${this.activeTab === 'timeline' ? 'border-emerald-500 text-white font-bold' : 'border-transparent text-[#94A3B8] hover:text-white'}">
+              <button id="tab-timeline" class="py-3 px-4 border-b-2 uppercase transition ${this.activeTab === 'timeline' ? 'border-[#E3262E] text-white font-bold' : 'border-transparent text-[#8A8A8A] hover:text-white'}">
                 Timeline
               </button>
-              <button id="tab-json" class="py-3 px-4 border-b-2 font-mono transition ${this.activeTab === 'json' ? 'border-emerald-500 text-white font-bold' : 'border-transparent text-[#94A3B8] hover:text-white'}">
+              <button id="tab-json" class="py-3 px-4 border-b-2 uppercase transition ${this.activeTab === 'json' ? 'border-[#E3262E] text-white font-bold' : 'border-transparent text-[#8A8A8A] hover:text-white'}">
                 Raw JSON
               </button>
             </div>
 
-            <!-- Drawer Scrollable Content -->
+            <!-- Tab Content Body -->
             <div class="flex-1 overflow-y-auto p-6 space-y-6">
               ${this.renderTabContent()}
             </div>
 
-            <!-- Drawer Footer Actions -->
-            <div class="p-4 bg-[#0A0E14] border-t border-[#1F2937] flex items-center justify-between gap-3">
-              <button id="track-cluster-btn" class="flex-1 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-[#0A0E14] font-semibold text-xs transition flex items-center justify-center space-x-1.5 shadow-md shadow-emerald-500/10">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                <span>Track Cluster Alerts</span>
-              </button>
-              <button id="inspect-source-btn" class="flex-1 py-2.5 rounded-xl bg-[#1F2937] hover:bg-gray-700 text-white font-medium text-xs border border-[#1F2937] transition flex items-center justify-center space-x-1.5">
-                <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-                <span>Inspect Collector Health</span>
+            <!-- Drawer Footer -->
+            <div class="p-4 bg-[#050505] border-t border-[#1F2937] flex items-center justify-between text-xs font-mono">
+              <span class="text-[#8A8A8A]">Updated: ${this.signal.lastUpdated || '2 mins ago'}</span>
+              <button id="drawer-inspect-pipeline-btn" class="px-3 py-1.5 bg-[#E3262E] text-white font-bold uppercase transition hover:bg-[#C11B22]">
+                Inspect Pipeline Health →
               </button>
             </div>
 
@@ -129,37 +124,36 @@ export class SignalDrawer {
   renderTabContent() {
     if (this.activeTab === 'sources') {
       return `
-        <div class="space-y-4">
-          <h4 class="text-xs font-mono font-bold text-white uppercase tracking-wider">Scraped &amp; Ingested Data Sources</h4>
-          <div class="space-y-3">
-            ${(this.signal.sources || []).map(s => `
-              <div class="p-3.5 rounded-xl bg-[#0A0E14] border border-[#1F2937] flex items-center justify-between">
-                <div>
-                  <div class="text-xs font-bold text-white">${s.name}</div>
-                  <div class="text-[11px] text-[#94A3B8] font-mono mt-0.5">Type: ${s.type} · ${s.count} records synthesized</div>
-                </div>
-                <span class="text-[10px] px-2 py-0.5 rounded font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                  ${s.status}
-                </span>
+        <div class="space-y-3 font-mono">
+          <div class="text-xs text-[#8A8A8A] uppercase tracking-wider">Ingested Public Sources (${this.signal.sources.length})</div>
+          ${this.signal.sources.map(src => `
+            <div class="p-4 bg-[#050505] border border-[#1F2937] space-y-1">
+              <div class="flex items-center justify-between text-xs">
+                <span class="font-bold text-white">${src.name}</span>
+                <span class="px-2 py-0.5 text-[10px] bg-[#0A0A0C] border border-[#1F2937] text-emerald-400 font-mono">${src.status}</span>
               </div>
-            `).join('')}
-          </div>
+              <div class="text-xs text-[#8A8A8A] flex justify-between pt-1">
+                <span>Category: ${src.type}</span>
+                <span>Signal Count: <strong>${src.count}</strong></span>
+              </div>
+            </div>
+          `).join('')}
         </div>
       `;
     }
 
     if (this.activeTab === 'timeline') {
       return `
-        <div class="space-y-4">
-          <h4 class="text-xs font-mono font-bold text-white uppercase tracking-wider">Cluster Convergence Sequence</h4>
-          <div class="relative pl-6 space-y-6 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-[#1F2937]">
-            ${(this.signal.timeline || []).map(t => `
-              <div class="relative">
-                <div class="absolute -left-6 top-1 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-[#141924]"></div>
-                <div class="text-[11px] font-mono text-emerald-400 font-semibold">${t.timestamp}</div>
-                <div class="text-xs text-[#F3F4F6] mt-0.5 leading-relaxed">${t.label}</div>
+        <div class="space-y-4 font-mono">
+          <div class="text-xs text-[#8A8A8A] uppercase tracking-wider">Chronological Evidence Trail</div>
+          <div class="space-y-3 relative before:absolute before:left-3 before:top-2 before:bottom-2 before:w-0.5 before:bg-[#1F2937]">
+            ${this.signal.timeline ? this.signal.timeline.map(t => `
+              <div class="relative pl-7 space-y-0.5">
+                <div class="absolute left-1.5 top-1.5 w-3 h-3 rounded-full bg-[#E3262E] border-2 border-[#050505]"></div>
+                <div class="text-[10px] text-[#E3262E] font-mono">${t.timestamp}</div>
+                <div class="text-xs text-white leading-relaxed font-mono">${t.label}</div>
               </div>
-            `).join('')}
+            `).join('') : '<div class="text-xs text-[#8A8A8A]">No timeline data recorded.</div>'}
           </div>
         </div>
       `;
@@ -167,64 +161,46 @@ export class SignalDrawer {
 
     if (this.activeTab === 'json') {
       return `
-        <div class="space-y-3">
-          <div class="flex items-center justify-between text-xs font-mono text-[#94A3B8]">
-            <span>Raw Normalized JSON Payload</span>
-            <span class="text-emerald-400">JSON Schema v2.1</span>
-          </div>
-          <pre class="terminal-font text-xs text-emerald-300 p-4 rounded-xl bg-[#0A0E14] border border-[#1F2937] overflow-x-auto max-h-96 leading-relaxed"><code>${JSON.stringify(this.signal.rawPayload, null, 2)}</code></pre>
+        <div class="space-y-2 font-mono">
+          <div class="text-xs text-[#8A8A8A] uppercase tracking-wider">Raw Collector Ingestion Payload</div>
+          <pre class="p-4 bg-[#050505] border border-[#1F2937] text-xs text-emerald-400 overflow-x-auto rounded-none font-mono">${JSON.stringify(this.signal.rawPayload || this.signal, null, 2)}</pre>
         </div>
       `;
     }
 
-    // Default Overview Tab
-    const m = this.signal.radarMetrics || { diversity: 80, velocity: 85, density: 90, recency: 88 };
+    // Default: Overview Tab
+    const m = this.signal.radarMetrics || { diversity: 85, velocity: 80, density: 90, recency: 88 };
     return `
-      <div class="space-y-6">
-        
-        <!-- Metrics Grid -->
-        <div class="grid grid-cols-2 gap-3">
-          <div class="p-3.5 rounded-xl bg-[#0A0E14] border border-[#1F2937]">
-            <div class="text-[11px] text-[#94A3B8] font-mono">Source Diversity</div>
-            <div class="text-xl font-bold font-mono text-white mt-1">${m.diversity}%</div>
-            <div class="w-full bg-[#1F2937] h-1.5 rounded-full mt-2 overflow-hidden">
-              <div class="bg-emerald-500 h-full rounded-full" style="width: ${m.diversity}%"></div>
+      <div class="space-y-6 font-mono">
+        <div class="space-y-3">
+          <div class="text-xs text-[#8A8A8A] uppercase tracking-wider">Spatio-Temporal Convergence Density</div>
+          <div class="grid grid-cols-2 gap-3">
+            <div class="p-3 bg-[#050505] border border-[#1F2937]">
+              <div class="text-[10px] text-[#8A8A8A]">SOURCE DIVERSITY</div>
+              <div class="text-lg font-bold text-white">${m.diversity}%</div>
             </div>
-          </div>
-          
-          <div class="p-3.5 rounded-xl bg-[#0A0E14] border border-[#1F2937]">
-            <div class="text-[11px] text-[#94A3B8] font-mono">Signal Velocity</div>
-            <div class="text-xl font-bold font-mono text-white mt-1">${m.velocity}%</div>
-            <div class="w-full bg-[#1F2937] h-1.5 rounded-full mt-2 overflow-hidden">
-              <div class="bg-indigo-400 h-full rounded-full" style="width: ${m.velocity}%"></div>
+            <div class="p-3 bg-[#050505] border border-[#1F2937]">
+              <div class="text-[10px] text-[#8A8A8A]">SIGNAL VELOCITY</div>
+              <div class="text-lg font-bold text-[#E3262E]">${m.velocity}%</div>
             </div>
-          </div>
-
-          <div class="p-3.5 rounded-xl bg-[#0A0E14] border border-[#1F2937]">
-            <div class="text-[11px] text-[#94A3B8] font-mono">Spatial Density</div>
-            <div class="text-xl font-bold font-mono text-white mt-1">${m.density}%</div>
-            <div class="w-full bg-[#1F2937] h-1.5 rounded-full mt-2 overflow-hidden">
-              <div class="bg-amber-400 h-full rounded-full" style="width: ${m.density}%"></div>
+            <div class="p-3 bg-[#050505] border border-[#1F2937]">
+              <div class="text-[10px] text-[#8A8A8A]">SPATIAL DENSITY</div>
+              <div class="text-lg font-bold text-white">${m.density}%</div>
             </div>
-          </div>
-
-          <div class="p-3.5 rounded-xl bg-[#0A0E14] border border-[#1F2937]">
-            <div class="text-[11px] text-[#94A3B8] font-mono">Recency Score</div>
-            <div class="text-xl font-bold font-mono text-white mt-1">${m.recency}%</div>
-            <div class="w-full bg-[#1F2937] h-1.5 rounded-full mt-2 overflow-hidden">
-              <div class="bg-teal-400 h-full rounded-full" style="width: ${m.recency}%"></div>
+            <div class="p-3 bg-[#050505] border border-[#1F2937]">
+              <div class="text-[10px] text-[#8A8A8A]">RECENCY DECAY</div>
+              <div class="text-lg font-bold text-white">${m.recency}%</div>
             </div>
           </div>
         </div>
 
-        <!-- Primary Data Summary -->
-        <div class="p-4 rounded-xl bg-[#0A0E14] border border-[#1F2937] space-y-2">
-          <h4 class="text-xs font-mono font-bold text-white uppercase tracking-wider">Spatial Convergence Assessment</h4>
-          <p class="text-xs text-[#94A3B8] leading-relaxed">
-            Multi-source anomaly detector registered simultaneous hiring spikes, commercial permit applications, and regulatory filings within a 2.4km radius in ${this.signal.city}.
-          </p>
+        <div class="space-y-2">
+          <div class="text-xs text-[#8A8A8A] uppercase tracking-wider">Scraper Collector Origin</div>
+          <div class="p-4 bg-[#050505] border border-[#1F2937] text-xs space-y-1 text-[#8A8A8A]">
+            <div>Collector ID: <strong class="text-white font-mono">${this.signal.rawPayload ? this.signal.rawPayload.primary_collector || 'brightdata_job_harvester_v2' : 'brightdata_harvester'}</strong></div>
+            <div>Source Categories Ingested: <strong class="text-white font-mono">${this.signal.category}</strong></div>
+          </div>
         </div>
-
       </div>
     `;
   }
@@ -232,24 +208,26 @@ export class SignalDrawer {
   attachEvents() {
     const backdrop = this.container.querySelector('#drawer-backdrop');
     const closeBtn = this.container.querySelector('#drawer-close-btn');
-    const inspectBtn = this.container.querySelector('#inspect-source-btn');
-    const trackBtn = this.container.querySelector('#track-cluster-btn');
+    const inspectBtn = this.container.querySelector('#drawer-inspect-pipeline-btn');
 
     if (backdrop) backdrop.addEventListener('click', () => this.close());
     if (closeBtn) closeBtn.addEventListener('click', () => this.close());
-    if (inspectBtn) inspectBtn.addEventListener('click', () => { this.close(); this.onInspectPipeline(); });
-    if (trackBtn) trackBtn.addEventListener('click', () => {
-      alert(`Cluster "${this.signal.title}" is now added to active spatial watchlist.`);
-    });
 
-    ['overview', 'sources', 'timeline', 'json'].forEach(tabKey => {
-      const tabBtn = this.container.querySelector(`#tab-${tabKey}`);
-      if (tabBtn) {
-        tabBtn.addEventListener('click', () => {
-          this.activeTab = tabKey;
-          this.render();
-        });
-      }
-    });
+    if (inspectBtn) {
+      inspectBtn.addEventListener('click', () => {
+        this.close();
+        this.onInspectPipeline();
+      });
+    }
+
+    const tabOverview = this.container.querySelector('#tab-overview');
+    const tabSources = this.container.querySelector('#tab-sources');
+    const tabTimeline = this.container.querySelector('#tab-timeline');
+    const tabJson = this.container.querySelector('#tab-json');
+
+    if (tabOverview) tabOverview.addEventListener('click', () => { this.activeTab = 'overview'; this.render(); });
+    if (tabSources) tabSources.addEventListener('click', () => { this.activeTab = 'sources'; this.render(); });
+    if (tabTimeline) tabTimeline.addEventListener('click', () => { this.activeTab = 'timeline'; this.render(); });
+    if (tabJson) tabJson.addEventListener('click', () => { this.activeTab = 'json'; this.render(); });
   }
 }

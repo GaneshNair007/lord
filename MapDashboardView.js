@@ -1,5 +1,5 @@
 /**
- * Signal Atlas — Map Dashboard View Component (Page 2)
+ * Signal Atlas — Map Dashboard View Component (PROJECT / ATLAS Editorial Design System)
  */
 
 import { getDataset, getCities, getCategories } from './dataset.js';
@@ -38,17 +38,17 @@ export class MapDashboardView {
     const categories = getCategories(this.activeMode);
 
     this.container.innerHTML = `
-      <div class="topographic-bg min-h-[calc(100vh-64px)] flex flex-col">
+      <div class="bg-[#050505] flex flex-col font-mono">
         
-        <!-- Live Signal Ticker Banner (Section 2 Requirement: pause-on-hover, 1 line, text-muted) -->
-        <div class="bg-[#0A0E14] border-b border-[#1F2937] px-4 py-2 text-xs text-[#94A3B8] ticker-wrap">
+        <!-- Live Signal Ticker Banner -->
+        <div class="bg-[#0A0A0C] border-b border-[#1F2937] px-4 py-2 text-xs text-[#8A8A8A] ticker-wrap">
           <div class="ticker-move flex items-center space-x-8 font-mono">
             <span class="inline-flex items-center space-x-2">
-              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-              <strong class="text-white">Austin, TX:</strong> Quantum Compute R&D Campus S_emergence=8.42 (+140%)
+              <span class="w-2 h-2 rounded-full bg-[#E3262E] animate-pulse"></span>
+              <strong class="text-white">Austin, TX:</strong> Quantum Compute R&amp;D Campus S_emergence=8.42 (+140%)
             </span>
             <span class="inline-flex items-center space-x-2">
-              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span class="w-2 h-2 rounded-full bg-[#E3262E] animate-pulse"></span>
               <strong class="text-white">San Jose, CA:</strong> AV Testing Hub S_emergence=9.15 (+210%)
             </span>
             <span class="inline-flex items-center space-x-2">
@@ -56,55 +56,51 @@ export class MapDashboardView {
               <strong class="text-white">Austin, TX (Civic Seeded):</strong> South End Drainage S_emergence=8.10 (+115%)
             </span>
             <span class="inline-flex items-center space-x-2">
-              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span class="w-2 h-2 rounded-full bg-[#E3262E] animate-pulse"></span>
               <strong class="text-white">Seattle, WA:</strong> AI Micro-Data Center Substation S_emergence=8.90 (+175%)
             </span>
           </div>
         </div>
 
         <!-- Toolbar Controls & Mode Switcher -->
-        <div class="bg-[#141924]/90 border-b border-[#1F2937] px-4 lg:px-8 py-3.5 space-y-3">
+        <div class="bg-[#0A0A0C] border-b border-[#1F2937] px-4 lg:px-8 py-3.5 space-y-3">
           <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
             
             <!-- Dual-Mode Switcher Toggle -->
-            <div class="flex items-center bg-[#0A0E14] p-1 rounded-xl border border-[#1F2937] w-full md:w-auto">
-              <button id="mode-btn-opp" class="flex-1 md:flex-initial px-4 py-1.5 rounded-lg text-xs font-semibold transition flex items-center justify-center space-x-2 ${!isCivic ? 'bg-emerald-500 text-[#0A0E14] shadow-sm' : 'text-[#94A3B8] hover:text-white'}">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                <span>Opportunities Mode</span>
-                <span class="text-[10px] px-1.5 py-0.2 rounded font-mono ${!isCivic ? 'bg-emerald-950/60 text-emerald-100' : 'bg-[#1F2937] text-gray-400'}">Live Scraped</span>
+            <div class="flex items-center bg-[#050505] p-1 border border-[#1F2937] w-full md:w-auto">
+              <button id="mode-btn-opp" class="flex-1 md:flex-initial px-4 py-1.5 text-xs font-mono font-bold uppercase transition flex items-center justify-center space-x-2 ${!isCivic ? 'bg-[#E3262E] text-white shadow-sm' : 'text-[#8A8A8A] hover:text-white'}">
+                <span>OPPORTUNITIES (LIVE SCRAPED)</span>
               </button>
 
-              <button id="mode-btn-civic" class="flex-1 md:flex-initial px-4 py-1.5 rounded-lg text-xs font-semibold transition flex items-center justify-center space-x-2 ${isCivic ? 'bg-amber-500 text-[#0A0E14] shadow-sm' : 'text-[#94A3B8] hover:text-white'}">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
-                <span>Civic Issues Mode</span>
-                <span class="text-[10px] px-1.5 py-0.2 rounded font-mono ${isCivic ? 'bg-amber-950/60 text-amber-100' : 'bg-[#1F2937] text-gray-400'}">Seeded Demo</span>
+              <button id="mode-btn-civic" class="flex-1 md:flex-initial px-4 py-1.5 text-xs font-mono font-bold uppercase transition flex items-center justify-center space-x-2 ${isCivic ? 'bg-amber-500 text-black shadow-sm' : 'text-[#8A8A8A] hover:text-white'}">
+                <span>CIVIC ISSUES (SEEDED DEMO)</span>
               </button>
             </div>
 
             <!-- Filters Row -->
-            <div class="flex flex-wrap items-center gap-3 w-full md:w-auto text-xs">
+            <div class="flex flex-wrap items-center gap-3 w-full md:w-auto text-xs font-mono">
               
               <!-- City Selector -->
-              <div class="flex items-center space-x-1.5 bg-[#0A0E14] px-3 py-1.5 rounded-xl border border-[#1F2937]">
-                <span class="text-[#94A3B8]">City:</span>
-                <select id="filter-city" class="bg-transparent text-white border-none focus:ring-0 font-medium cursor-pointer">
-                  ${getCities().map(c => `<option value="${c}" ${this.filters.city === c ? 'selected' : ''} class="bg-[#141924] text-white">${c === 'all' ? 'All Metros' : c}</option>`).join('')}
+              <div class="flex items-center space-x-1.5 bg-[#050505] px-3 py-1.5 border border-[#1F2937]">
+                <span class="text-[#8A8A8A]">CITY:</span>
+                <select id="filter-city" class="bg-transparent text-white border-none focus:ring-0 font-mono uppercase cursor-pointer">
+                  ${getCities().map(c => `<option value="${c}" ${this.filters.city === c ? 'selected' : ''} class="bg-[#0A0A0C] text-white">${c === 'all' ? 'ALL METROS' : c}</option>`).join('')}
                 </select>
               </div>
 
               <!-- Category Filter -->
-              <div class="flex items-center space-x-1.5 bg-[#0A0E14] px-3 py-1.5 rounded-xl border border-[#1F2937]">
-                <span class="text-[#94A3B8]">Category:</span>
-                <select id="filter-category" class="bg-transparent text-white border-none focus:ring-0 font-medium cursor-pointer">
-                  ${categories.map(cat => `<option value="${cat}" ${this.filters.category === cat ? 'selected' : ''} class="bg-[#141924] text-white">${cat === 'all' ? 'All Categories' : cat}</option>`).join('')}
+              <div class="flex items-center space-x-1.5 bg-[#050505] px-3 py-1.5 border border-[#1F2937]">
+                <span class="text-[#8A8A8A]">CATEGORY:</span>
+                <select id="filter-category" class="bg-transparent text-white border-none focus:ring-0 font-mono uppercase cursor-pointer">
+                  ${categories.map(cat => `<option value="${cat}" ${this.filters.category === cat ? 'selected' : ''} class="bg-[#0A0A0C] text-white">${cat === 'all' ? 'ALL CATEGORIES' : cat}</option>`).join('')}
                 </select>
               </div>
 
               <!-- Emergence Slider -->
-              <div class="flex items-center space-x-2 bg-[#0A0E14] px-3 py-1.5 rounded-xl border border-[#1F2937]">
-                <span class="text-[#94A3B8]">Min S_emergence:</span>
-                <input type="range" id="filter-score" min="0" max="10" step="0.5" value="${this.filters.minScore}" class="w-20 accent-emerald-500 cursor-pointer">
-                <span id="filter-score-val" class="font-mono text-emerald-400 font-bold w-6 text-right">${this.filters.minScore}</span>
+              <div class="flex items-center space-x-2 bg-[#050505] px-3 py-1.5 border border-[#1F2937]">
+                <span class="text-[#8A8A8A]">MIN S_EMERGENCE:</span>
+                <input type="range" id="filter-score" min="0" max="10" step="0.5" value="${this.filters.minScore}" class="w-20 accent-[#E3262E] cursor-pointer">
+                <span id="filter-score-val" class="font-mono text-[#E3262E] font-bold w-6 text-right">${this.filters.minScore}</span>
               </div>
 
             </div>
@@ -113,27 +109,21 @@ export class MapDashboardView {
         </div>
 
         <!-- Main Map Area -->
-        <div class="relative flex-1 min-h-[550px] w-full flex flex-col">
+        <div class="relative flex-1 min-h-[520px] w-full flex flex-col mt-4">
           
           <!-- Leaflet / Vector Spatial Map Container -->
-          <div id="map-container" class="absolute inset-0 z-0 bg-[#0A0E14] overflow-hidden"></div>
+          <div id="map-container" class="map-canvas-container"></div>
 
-          <!-- Empty State Overlay (Section 2 Requirement) -->
-          <div id="map-empty-state" class="${this.currentDataset.length > 0 ? 'hidden' : ''} absolute inset-0 z-10 bg-[#0A0E14]/85 backdrop-blur-sm flex items-center justify-center p-6 text-center">
-            <div class="max-w-md p-8 rounded-2xl bg-[#141924] border border-[#1F2937] space-y-3 shadow-2xl">
-              <div class="w-12 h-12 mx-auto rounded-full bg-[#1F2937] flex items-center justify-center text-gray-400">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-              </div>
-              <h3 class="text-base font-bold text-white">No convergence detected yet</h3>
-              <p class="text-xs text-[#94A3B8]">Signals accumulate as collectors run. Try lowering the emergence score threshold filter above.</p>
-              <button id="reset-filters-btn" class="px-4 py-2 rounded-lg bg-emerald-500 text-[#0A0E14] text-xs font-bold transition hover:bg-emerald-400">
-                Reset Threshold Filter
+          <!-- Empty State Overlay -->
+          <div id="map-empty-state" class="${this.currentDataset.length > 0 ? 'hidden' : ''} absolute inset-0 z-10 bg-[#050505]/90 backdrop-blur-sm flex items-center justify-center p-6 text-center">
+            <div class="max-w-md p-8 bg-[#0A0A0C] border border-[#1F2937] space-y-3 shadow-2xl">
+              <h3 class="text-base font-bold font-serif text-white uppercase">NO CONVERGENCE DETECTED YET</h3>
+              <p class="text-xs text-[#8A8A8A] font-mono">Signals accumulate as collectors run. Try lowering the emergence score threshold filter above.</p>
+              <button id="reset-filters-btn" class="px-4 py-2 bg-[#E3262E] text-white text-xs font-mono font-bold uppercase transition hover:bg-[#C11B22]">
+                RESET THRESHOLD FILTER
               </button>
             </div>
           </div>
-
-          <!-- Drawer Mounting Container -->
-          <div id="drawer-container"></div>
 
         </div>
 
@@ -141,15 +131,16 @@ export class MapDashboardView {
     `;
 
     this.attachEvents();
-    this.initMap(this.currentDataset);
+    this.initMap();
   }
 
-  initMap(dataset) {
+  initMap() {
     setTimeout(() => {
       const mapEl = document.getElementById('map-container');
       if (!mapEl) return;
 
-      // Check if Leaflet L object exists
+      const dataset = this.currentDataset;
+
       if (typeof L !== 'undefined') {
         try {
           if (!this.map) {
@@ -174,7 +165,6 @@ export class MapDashboardView {
         }
       }
 
-      // Robust Vector Spatial Map fallback
       this.renderVectorSpatialMap(dataset, mapEl);
     }, 50);
   }
@@ -196,16 +186,16 @@ export class MapDashboardView {
       bounds.push(coords);
 
       const pulseClass = isCivic ? 'marker-pulse-civic' : 'marker-pulse-opp';
-      const badgeBg = isCivic ? 'bg-amber-500' : 'bg-emerald-500';
+      const borderColor = isCivic ? 'border-amber-400 text-amber-400' : 'border-[#E3262E] text-[#E3262E]';
 
       const customIcon = L.divIcon({
         className: 'custom-map-marker',
         html: `
           <div class="relative group cursor-pointer" data-id="${item.id}">
-            <div class="w-10 h-10 rounded-full ${badgeBg}/20 border-2 ${isCivic ? 'border-amber-400 text-amber-400' : 'border-emerald-400 text-emerald-400'} ${pulseClass} flex items-center justify-center font-mono text-xs font-bold shadow-lg">
+            <div class="w-10 h-10 rounded-full bg-[#050505]/90 border-2 ${borderColor} ${pulseClass} flex items-center justify-center font-mono text-xs font-bold shadow-2xl">
               ${item.emergenceScore.toFixed(1)}
             </div>
-            <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block bg-[#0A0E14] text-white text-[11px] font-medium px-3 py-1.5 rounded-lg border border-[#1F2937] whitespace-nowrap z-50 shadow-xl">
+            <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block bg-[#0A0A0C] text-white text-[11px] font-mono px-3 py-1.5 border border-[#1F2937] whitespace-nowrap z-50 shadow-xl">
               ${item.title} (${item.city})
             </div>
           </div>
@@ -225,10 +215,9 @@ export class MapDashboardView {
 
   renderVectorSpatialMap(dataset, container) {
     const isCivic = this.activeMode === 'civic';
-    const accentColor = isCivic ? '#F59E0B' : '#22C55E';
+    const accentColor = isCivic ? '#F59E0B' : '#E3262E';
     const pulseClass = isCivic ? 'marker-pulse-civic' : 'marker-pulse-opp';
 
-    // Spatial positions for cards/pins on vector grid
     const cityPositions = {
       "Austin, TX": { left: "45%", top: "65%" },
       "San Jose, CA": { left: "20%", top: "45%" },
@@ -237,59 +226,52 @@ export class MapDashboardView {
     };
 
     container.innerHTML = `
-      <div class="relative w-full h-full bg-[#0A0E14] overflow-hidden flex flex-col justify-between p-6">
+      <div class="relative w-full h-full bg-[#080808] overflow-hidden flex flex-col justify-between p-6">
         
-        <!-- Topo grid SVG overlay -->
-        <svg class="absolute inset-0 w-full h-full opacity-30 pointer-events-none" xmlns="http://www.w3.org/2000/svg">
+        <svg class="absolute inset-0 w-full h-full opacity-20 pointer-events-none" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
               <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1F2937" stroke-width="1"/>
             </pattern>
           </defs>
           <rect width="100%" height="100%" fill="url(#grid)" />
-          <!-- Contour lines -->
-          <path d="M 100 200 Q 300 100 600 300 T 1100 200" fill="none" stroke="#818CF8" stroke-opacity="0.15" stroke-width="2"/>
-          <path d="M 150 400 Q 400 250 700 450 T 1200 350" fill="none" stroke="#22C55E" stroke-opacity="0.1" stroke-width="2"/>
+          <path d="M 100 200 Q 300 100 600 300 T 1100 200" fill="none" stroke="#E3262E" stroke-opacity="0.2" stroke-width="2"/>
         </svg>
 
-        <!-- Legend / Map Status Header -->
-        <div class="relative z-10 flex items-center justify-between text-xs font-mono text-[#94A3B8]">
-          <div class="flex items-center space-x-2 bg-[#141924]/90 px-3 py-1.5 rounded-xl border border-[#1F2937]">
+        <div class="relative z-10 flex items-center justify-between text-xs font-mono text-[#8A8A8A]">
+          <div class="flex items-center space-x-2 bg-[#0A0A0C] px-3 py-1.5 border border-[#1F2937]">
             <span class="w-2 h-2 rounded-full" style="background-color: ${accentColor}"></span>
-            <span class="text-white font-bold">${isCivic ? 'Civic Issues Mode (Seeded Data)' : 'Opportunities Mode (Live Scraped)'}</span>
+            <span class="text-white font-bold">${isCivic ? 'CIVIC ISSUES MODE (SEEDED DATA)' : 'OPPORTUNITIES MODE (LIVE SCRAPED)'}</span>
           </div>
-          <div class="bg-[#141924]/90 px-3 py-1.5 rounded-xl border border-[#1F2937]">
-            Showing <strong class="text-white">${dataset.length}</strong> spatial clusters
+          <div class="bg-[#0A0A0C] px-3 py-1.5 border border-[#1F2937]">
+            SHOWING <strong class="text-white">${dataset.length}</strong> SPATIAL CLUSTERS
           </div>
         </div>
 
-        <!-- Interactive Spatial Markers Container -->
         <div class="relative z-10 flex-1 my-4">
           ${dataset.map(item => {
             const pos = cityPositions[item.city] || { left: "50%", top: "50%" };
             return `
               <div class="absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer group" style="left: ${pos.left}; top: ${pos.top};" data-marker-id="${item.id}">
-                <div class="w-12 h-12 rounded-full border-2 ${pulseClass} flex items-center justify-center font-mono text-xs font-bold shadow-2xl transition hover:scale-110" style="background-color: rgba(10,14,20,0.9); border-color: ${accentColor}; color: ${accentColor}">
+                <div class="w-12 h-12 rounded-full border-2 ${pulseClass} flex items-center justify-center font-mono text-xs font-bold shadow-2xl transition hover:scale-110" style="background-color: rgba(5,5,5,0.9); border-color: ${accentColor}; color: ${accentColor}">
                   ${item.emergenceScore.toFixed(1)}
                 </div>
-                <div class="mt-2 bg-[#141924]/95 text-white text-xs font-medium px-3 py-2 rounded-xl border border-[#1F2937] shadow-xl text-center whitespace-nowrap">
-                  <div class="font-bold text-white">${item.title}</div>
-                  <div class="text-[11px] text-[#94A3B8] font-mono">${item.city} · ${item.scoreChange}</div>
+                <div class="mt-2 bg-[#0A0A0C] text-white text-xs font-mono px-3 py-2 border border-[#1F2937] shadow-xl text-center whitespace-nowrap">
+                  <div class="font-bold text-white uppercase">${item.title}</div>
+                  <div class="text-[11px] text-[#8A8A8A] font-mono">${item.city} • ${item.scoreChange}</div>
                 </div>
               </div>
             `;
           }).join('')}
         </div>
 
-        <!-- Vector Footer Note -->
-        <div class="relative z-10 text-[11px] text-[#94A3B8] font-mono text-center">
-          Click any cluster node above to open spatial breakdown &amp; raw JSON payload drawer.
+        <div class="relative z-10 text-[11px] text-[#8A8A8A] font-mono text-center uppercase tracking-wider">
+          Click any cluster node above to inspect spatial breakdown &amp; raw payload drawer.
         </div>
 
       </div>
     `;
 
-    // Attach click listeners to vector markers
     dataset.forEach(item => {
       const markerEl = container.querySelector(`[data-marker-id="${item.id}"]`);
       if (markerEl) {
@@ -301,7 +283,7 @@ export class MapDashboardView {
   openDrawer(signal) {
     if (!this.drawer) {
       this.drawer = new SignalDrawer('drawer-container', {
-        onInspectPipeline: () => this.onNavigate('pipeline')
+        onInspectPipeline: () => this.onNavigate('scene-03')
       });
     }
     this.drawer.open(signal);
@@ -349,4 +331,3 @@ export class MapDashboardView {
     }
   }
 }
-

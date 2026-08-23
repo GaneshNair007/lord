@@ -1,5 +1,5 @@
 /**
- * Signal Atlas — Pipeline Health & Self-Healing Monitor Component (Page 3)
+ * Signal Atlas — Pipeline Health & Self-Healing Monitor Component (PROJECT / ATLAS Editorial Visual System)
  */
 
 import { selfHealingEngine } from './selfHealingEngine.js';
@@ -28,202 +28,138 @@ export class PipelineHealthView {
     const isHealedUnapproved = state.status === 'HEALED_UNAPPROVED';
     const isHealthy = state.status === 'HEALTHY';
 
-    let statusBadgeColor = 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30';
-    let statusLabel = '🟢 ALL SYSTEMS HEALTHY (100% OPERATIONAL)';
+    let statusBadgeColor = 'bg-emerald-950/40 text-emerald-400 border-emerald-500/30';
+    let statusLabel = '🟢 SYSTEM HEALTHY — ALL 4 COLLECTORS OPERATIONAL (FILL RATE 100%)';
     if (isDegraded) {
-      statusBadgeColor = 'bg-red-500/10 text-red-400 border-red-500/30 animate-pulse';
-      statusLabel = '🔴 CRITICAL: DOM SELECTOR DRIFT DETECTED IN BRIGHTDATA SCRAPER';
+      statusBadgeColor = 'bg-red-950/60 text-[#E3262E] border-[#E3262E] animate-pulse';
+      statusLabel = '🔴 CRITICAL: DOM SELECTOR DRIFT DETECTED IN BRIGHTDATA COLLECTOR';
     } else if (isRepairing) {
-      statusBadgeColor = 'bg-amber-500/10 text-amber-400 border-amber-500/30 animate-pulse';
-      statusLabel = '🟡 REPAIRING: GEMINI AI AGENT SYNTHESIZING FALLBACK AST PATCH';
+      statusBadgeColor = 'bg-amber-950/60 text-amber-400 border-amber-500/40 animate-pulse';
+      statusLabel = '🟡 REPAIRING: GEMINI LLM AGENT SYNTHESIZING AST SELECTOR PATCH';
     } else if (isHealedUnapproved) {
-      statusBadgeColor = 'bg-indigo-500/10 text-indigo-300 border-indigo-500/30 animate-pulse';
-      statusLabel = '🔵 AUTO-PATCH READY: SYNTHETIC SELECTOR GENERATED — APPROVAL PENDING';
+      statusBadgeColor = 'bg-indigo-950/60 text-indigo-300 border-indigo-500/40 animate-pulse';
+      statusLabel = '🔵 AUTO-PATCH GENERATED: AST DIFF READY FOR OPERATOR APPROVAL';
     }
 
     this.container.innerHTML = `
-      <div class="topographic-bg min-h-[calc(100vh-64px)] p-4 lg:p-8 space-y-8 max-w-7xl mx-auto">
+      <div class="space-y-8 max-w-7xl mx-auto px-4 font-mono">
         
-        <!-- Header & Status Banner -->
-        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-6 border-b border-[#1F2937]">
+        <!-- Header & Interactive Controls -->
+        <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 pb-6 border-b border-[#1F2937]">
           <div>
-            <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full border text-xs font-mono mb-2 ${statusBadgeColor}">
-              <span class="w-2 h-2 rounded-full ${isDegraded ? 'bg-red-500 animate-ping' : 'bg-emerald-400'}"></span>
+            <div class="inline-flex items-center space-x-2 px-3 py-1.5 border text-xs font-mono mb-3 ${statusBadgeColor}">
+              <span class="w-2 h-2 rounded-full ${isDegraded ? 'bg-[#E3262E] animate-ping' : 'bg-emerald-400'}"></span>
               <span>${statusLabel}</span>
             </div>
-            <h1 class="text-3xl font-extrabold text-white tracking-tight">Pipeline Health &amp; Self-Healing Console</h1>
-            <p class="text-xs text-[#94A3B8] mt-1">Autonomous web scraper DOM drift detection, schema recovery, and operator verification logs.</p>
+            <h2 class="font-serif text-2xl lg:text-3xl font-extrabold text-white uppercase tracking-tight">PIPELINE HEALTH &amp; RECOVERY CONSOLE</h2>
+            <p class="text-xs text-[#8A8A8A] mt-1 font-mono uppercase tracking-wider">Autonomous DOM Drift Detection · Schema Auto-Repair · Human Operator Approval Gating</p>
           </div>
 
-          <!-- Quick Action Buttons -->
-          <div class="flex flex-wrap items-center gap-2">
-            <button id="btn-drift" class="px-4 py-2.5 rounded-xl bg-red-500/20 hover:bg-red-500/30 text-red-300 border border-red-500/40 text-xs font-bold transition flex items-center space-x-1.5 ${!isHealthy ? 'opacity-50 cursor-not-allowed' : ''}" ${!isHealthy ? 'disabled' : ''}>
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-              <span>1. Simulate Selector Drift</span>
+          <!-- Quick Action Buttons matching Editorial Theme -->
+          <div class="flex flex-wrap items-center gap-3">
+            <button id="btn-drift" class="px-4 py-2.5 bg-red-950/40 hover:bg-red-900/60 text-[#E3262E] border border-[#E3262E]/60 text-xs font-bold font-mono uppercase transition flex items-center space-x-2 ${!isHealthy ? 'opacity-40 cursor-not-allowed' : ''}" ${!isHealthy ? 'disabled' : ''}>
+              <span>1. SIMULATE DRIFT</span>
             </button>
 
-            <button id="btn-heal" class="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition flex items-center space-x-1.5 shadow-md shadow-indigo-600/20 ${!isDegraded ? 'opacity-50 cursor-not-allowed' : ''}" ${!isDegraded ? 'disabled' : ''}>
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-              <span>2. Trigger AI Repair Agent</span>
+            <button id="btn-heal" class="px-4 py-2.5 bg-[#E3262E] hover:bg-[#C11B22] text-white text-xs font-bold font-mono uppercase transition flex items-center space-x-2 shadow-lg shadow-[#E3262E]/20 ${!isDegraded ? 'opacity-40 cursor-not-allowed' : ''}" ${!isDegraded ? 'disabled' : ''}>
+              <span>2. TRIGGER LLM REPAIR</span>
             </button>
 
-            <button id="btn-approve" class="px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-[#0A0E14] text-xs font-extrabold transition flex items-center space-x-1.5 shadow-md shadow-emerald-500/20 ${!isHealedUnapproved ? 'opacity-50 cursor-not-allowed' : ''}" ${!isHealedUnapproved ? 'disabled' : ''}>
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-              <span>3. Approve Auto-Patch</span>
+            <button id="btn-approve" class="px-4 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-black text-xs font-extrabold font-mono uppercase transition flex items-center space-x-2 shadow-lg shadow-emerald-500/20 ${!isHealedUnapproved ? 'opacity-40 cursor-not-allowed' : ''}" ${!isHealedUnapproved ? 'disabled' : ''}>
+              <span>3. APPROVE AUTO-PATCH</span>
             </button>
 
-            <button id="btn-reset" class="p-2.5 rounded-xl bg-[#141924] hover:bg-[#1E2536] text-[#94A3B8] border border-[#1F2937] text-xs transition" title="Reset Demo">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+            <button id="btn-reset" class="px-3 py-2.5 bg-[#0A0A0C] hover:bg-[#141924] text-[#8A8A8A] hover:text-white border border-[#1F2937] text-xs font-mono uppercase transition" title="Reset Demo">
+              <span>RESET</span>
             </button>
           </div>
         </div>
 
-        <!-- Metrics Grid -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div class="bg-[#141924] p-5 rounded-2xl border border-[#1F2937]">
-            <div class="text-xs text-[#94A3B8] font-mono">Active Scrapers</div>
+        <!-- Metric Cards -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="bg-[#0A0A0C] p-5 border border-[#1F2937]">
+            <div class="text-[11px] text-[#8A8A8A] font-mono uppercase tracking-wider">Collector Status</div>
             <div class="text-2xl font-bold font-mono text-white mt-1">
-              ${isDegraded ? '3/4' : '4/4'} <span class="text-xs text-emerald-400 font-normal">Active</span>
+              ${isDegraded ? '3/4 ONLINE' : '4/4 ONLINE'}
             </div>
+            <div class="text-[10px] text-[#E3262E] font-mono mt-1">${isDegraded ? '1 Collector Degraded' : '100% Collector Fill Rate'}</div>
           </div>
 
-          <div class="bg-[#141924] p-5 rounded-2xl border border-[#1F2937]">
-            <div class="text-xs text-[#94A3B8] font-mono">Pipeline Uptime</div>
+          <div class="bg-[#0A0A0C] p-5 border border-[#1F2937]">
+            <div class="text-[11px] text-[#8A8A8A] font-mono uppercase tracking-wider">Pipeline Uptime</div>
             <div class="text-2xl font-bold font-mono text-emerald-400 mt-1">99.8%</div>
+            <div class="text-[10px] text-[#8A8A8A] font-mono mt-1">Zero Data Loss Architecture</div>
           </div>
 
-          <div class="bg-[#141924] p-5 rounded-2xl border border-[#1F2937]">
-            <div class="text-xs text-[#94A3B8] font-mono">Auto-Healed Incidents</div>
-            <div class="text-2xl font-bold font-mono text-indigo-400 mt-1">${state.healedIncidentsCount}</div>
+          <div class="bg-[#0A0A0C] p-5 border border-[#1F2937]">
+            <div class="text-[11px] text-[#8A8A8A] font-mono uppercase tracking-wider">Auto-Healed Incidents</div>
+            <div class="text-2xl font-bold font-mono text-[#E3262E] mt-1">${state.healedIncidentsCount}</div>
+            <div class="text-[10px] text-[#8A8A8A] font-mono mt-1">Mean Repair: 1.4s</div>
           </div>
 
-          <div class="bg-[#141924] p-5 rounded-2xl border border-[#1F2937]">
-            <div class="text-xs text-[#94A3B8] font-mono">Mean Time to Repair (MTTR)</div>
-            <div class="text-2xl font-bold font-mono text-white mt-1">1.4s</div>
-          </div>
-        </div>
-
-        <!-- Collector Status Table -->
-        <div class="bg-[#141924] rounded-2xl border border-[#1F2937] overflow-hidden">
-          <div class="bg-[#0A0E14] px-6 py-3.5 border-b border-[#1F2937] flex items-center justify-between">
-            <span class="text-xs font-mono font-bold text-white uppercase tracking-wider">Collector Pipelines Status</span>
-            <span class="text-xs text-[#94A3B8]">Bright Data Web Scraper API Engine</span>
-          </div>
-
-          <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs">
-              <thead class="bg-[#0D121B] text-[#94A3B8] font-mono border-b border-[#1F2937]">
-                <tr>
-                  <th class="px-6 py-3">Collector ID</th>
-                  <th class="px-6 py-3">Target Public Portal</th>
-                  <th class="px-6 py-3">Error Rate</th>
-                  <th class="px-6 py-3">Last Sync</th>
-                  <th class="px-6 py-3 text-right">Status</th>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-[#1F2937] text-white">
-                ${state.collectors.map(c => {
-                  let badge = '<span class="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono">🟢 Healthy</span>';
-                  if (c.status === 'DEGRADED') {
-                    badge = '<span class="px-2.5 py-0.5 rounded-full bg-red-500/10 text-red-400 border border-red-500/20 font-mono animate-pulse">🔴 Degraded (DOM Drift)</span>';
-                  } else if (c.status === 'REPAIRING') {
-                    badge = '<span class="px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-mono animate-pulse">🟡 AI Repairing</span>';
-                  } else if (c.status === 'PATCH_PENDING') {
-                    badge = '<span class="px-2.5 py-0.5 rounded-full bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 font-mono">🔵 Patch Pending</span>';
-                  }
-
-                  return `
-                    <tr class="hover:bg-[#1E2536]/50 transition">
-                      <td class="px-6 py-3.5 font-mono font-bold">${c.name}</td>
-                      <td class="px-6 py-3.5 text-[#94A3B8]">${c.target}</td>
-                      <td class="px-6 py-3.5 font-mono ${c.errorRate !== '0.00%' && c.errorRate !== '0.01%' && c.errorRate !== '0.02%' ? 'text-red-400 font-bold' : 'text-gray-300'}">${c.errorRate}</td>
-                      <td class="px-6 py-3.5 text-[#94A3B8]">${c.lastSync}</td>
-                      <td class="px-6 py-3.5 text-right">${badge}</td>
-                    </tr>
-                  `;
-                }).join('')}
-              </tbody>
-            </table>
+          <div class="bg-[#0A0A0C] p-5 border border-[#1F2937]">
+            <div class="text-[11px] text-[#8A8A8A] font-mono uppercase tracking-wider">Active Selector Schema</div>
+            <div class="text-xl font-bold font-mono text-white mt-1 truncate">${state.currentSelector}</div>
+            <div class="text-[10px] text-[#8A8A8A] font-mono mt-1">Bright Data Harvester v2.4</div>
           </div>
         </div>
 
-        <!-- Side-by-Side Payload Diff Inspector -->
-        <div id="diff-viewer-mount"></div>
+        <!-- Horizontal Pipeline Step Machine Visualizer -->
+        <div class="bg-[#0A0A0C] border border-[#1F2937] p-6 space-y-4">
+          <div class="text-xs font-mono text-[#8A8A8A] uppercase tracking-widest flex items-center justify-between border-b border-[#1F2937] pb-3">
+            <span>5-STEP RECOVERABLE SCRAPER LIFECYCLE</span>
+            <span>DOM DRIFT RECOVERY PROTOCOL</span>
+          </div>
 
-        <!-- Streaming Terminal Console (Section 2 & 3 Requirement) -->
-        <div class="bg-[#0A0E14] rounded-2xl border border-[#1F2937] overflow-hidden shadow-2xl">
-          <div class="bg-[#0F141C] px-5 py-3 border-b border-[#1F2937] flex items-center justify-between">
-            <div class="flex items-center space-x-2">
-              <div class="flex space-x-1.5">
-                <span class="w-3 h-3 rounded-full bg-red-500/80"></span>
-                <span class="w-3 h-3 rounded-full bg-amber-500/80"></span>
-                <span class="w-3 h-3 rounded-full bg-emerald-500/80"></span>
-              </div>
-              <span class="text-xs font-mono text-gray-300 font-bold ml-2">Collector Stream Log Console</span>
+          <div class="pipeline-track mx-auto">
+            <div class="pipeline-step ${isHealthy || isDegraded || isRepairing || isHealedUnapproved ? 'active-step' : ''}">
+              <div class="step-label">01. DISCOVER</div>
+              <div class="step-status text-emerald-400">100% FILL RATE</div>
             </div>
-            <span class="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded">REALTIME LOG STREAM</span>
-          </div>
-
-          <div id="terminal-log-output" class="p-5 font-mono text-xs space-y-2 overflow-y-auto max-h-80 text-gray-300 leading-relaxed">
-            ${state.logHistory.map(l => {
-              let color = 'text-gray-300';
-              if (l.level === 'ERROR') color = 'text-red-400 font-bold bg-red-500/10 p-1 rounded';
-              if (l.level === 'WARN') color = 'text-amber-400 font-semibold';
-              if (l.level === 'SUCCESS') color = 'text-emerald-400 font-semibold';
-              return `
-                <div class="flex items-start space-x-3">
-                  <span class="text-[#94A3B8] text-[11px] select-none">${l.timestamp}</span>
-                  <span class="px-1.5 py-0.2 rounded text-[10px] bg-[#1F2937] text-indigo-300 select-none">${l.source}</span>
-                  <span class="${color}">${l.message}</span>
-                </div>
-              `;
-            }).join('')}
+            <div class="pipeline-step ${isHealthy || isDegraded || isRepairing || isHealedUnapproved ? 'active-step' : ''}">
+              <div class="step-label">02. EXTRACT</div>
+              <div class="step-status text-emerald-400">RAW DATA STREAM</div>
+            </div>
+            <div class="pipeline-step ${isDegraded ? 'glitch-step' : 'active-step'}">
+              <div class="step-label">03. STRUCTURE</div>
+              <div class="step-status ${isDegraded ? 'text-[#E3262E] font-bold' : 'text-emerald-400'}">
+                ${isDegraded ? 'DOM DRIFT DETECTED' : 'SCHEMA VALIDATED'}
+              </div>
+            </div>
+            <div class="pipeline-step ${isRepairing || isHealedUnapproved ? 'active-step' : ''}">
+              <div class="step-label">04. ANALYZE</div>
+              <div class="step-status ${isRepairing ? 'text-amber-400 font-bold' : 'text-[#8A8A8A]'}">
+                ${isRepairing ? 'LLM HEALING...' : isHealedUnapproved ? 'PATCH SYNTHESIZED' : 'AST PARSER READY'}
+              </div>
+            </div>
+            <div class="pipeline-step ${isHealthy && state.healedIncidentsCount > 0 ? 'active-step' : ''}">
+              <div class="step-label">05. RECOVER</div>
+              <div class="step-status text-emerald-400">1.4s AUTO-REPAIRED</div>
+            </div>
           </div>
         </div>
+
+        <!-- Payload & AST Diff Inspector Container -->
+        <div id="payload-diff-mount" class="bg-[#0A0A0C] border border-[#1F2937] p-6"></div>
 
       </div>
     `;
 
-    this.attachEvents();
-
-    // Mount Side-by-side Payload Diff Viewer
-    if (!this.diffViewer) {
-      this.diffViewer = new PayloadDiffViewer('diff-viewer-mount', {
-        brokenPayload: state.brokenPayload,
-        healedPayload: state.healedPayload
-      });
-    } else {
-      this.diffViewer.update(state.brokenPayload, state.healedPayload);
+    // Initialize Diff Viewer
+    const diffMount = this.container.querySelector('#payload-diff-mount');
+    if (diffMount) {
+      this.diffViewer = new PayloadDiffViewer('payload-diff-mount');
     }
 
-    // Subscribe to real-time engine changes
-    this.unsubscribe = selfHealingEngine.subscribe((newState) => {
-      this.updateStateUI(newState);
-    });
+    this.attachEvents();
+    this.subscribeToEngine();
   }
 
-  updateStateUI(state) {
-    const term = document.getElementById('terminal-log-output');
-    if (term) {
-      term.innerHTML = state.logHistory.map(l => {
-        let color = 'text-gray-300';
-        if (l.level === 'ERROR') color = 'text-red-400 font-bold bg-red-500/10 p-1 rounded';
-        if (l.level === 'WARN') color = 'text-amber-400 font-semibold';
-        if (l.level === 'SUCCESS') color = 'text-emerald-400 font-semibold';
-        return `
-          <div class="flex items-start space-x-3">
-            <span class="text-[#94A3B8] text-[11px] select-none">${l.timestamp}</span>
-            <span class="px-1.5 py-0.2 rounded text-[10px] bg-[#1F2937] text-indigo-300 select-none">${l.source}</span>
-            <span class="${color}">${l.message}</span>
-          </div>
-        `;
-      }).join('');
-      term.scrollTop = term.scrollHeight;
-    }
-
-    if (this.diffViewer) {
-      this.diffViewer.update(state.brokenPayload, state.healedPayload);
-    }
+  subscribeToEngine() {
+    if (this.unsubscribe) this.unsubscribe();
+    this.unsubscribe = selfHealingEngine.subscribe(() => {
+      this.render();
+    });
   }
 
   attachEvents() {
@@ -232,25 +168,9 @@ export class PipelineHealthView {
     const btnApprove = this.container.querySelector('#btn-approve');
     const btnReset = this.container.querySelector('#btn-reset');
 
-    if (btnDrift) btnDrift.addEventListener('click', () => {
-      selfHealingEngine.simulateDrift();
-      this.render();
-    });
-
-    if (btnHeal) btnHeal.addEventListener('click', () => {
-      selfHealingEngine.triggerSelfHealing();
-      this.render();
-    });
-
-    if (btnApprove) btnApprove.addEventListener('click', () => {
-      selfHealingEngine.approvePatch();
-      this.render();
-    });
-
-    if (btnReset) btnReset.addEventListener('click', () => {
-      selfHealingEngine.reset();
-      this.render();
-    });
+    if (btnDrift) btnDrift.addEventListener('click', () => selfHealingEngine.simulateDrift());
+    if (btnHeal) btnHeal.addEventListener('click', () => selfHealingEngine.triggerHeal());
+    if (btnApprove) btnApprove.addEventListener('click', () => selfHealingEngine.approvePatch());
+    if (btnReset) btnReset.addEventListener('click', () => selfHealingEngine.resetDemo());
   }
 }
-

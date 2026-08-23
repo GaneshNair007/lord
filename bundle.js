@@ -315,48 +315,47 @@
         return;
       }
       const isCivic = this.signal.id.startsWith("civic");
-      const accentColor = isCivic ? "#F59E0B" : "#22C55E";
-      const accentBg = isCivic ? "bg-amber-500/10 border-amber-500/30 text-amber-400" : "bg-emerald-500/10 border-emerald-500/30 text-emerald-400";
+      const accentColor = isCivic ? "#F59E0B" : "#E3262E";
+      const accentBg = isCivic ? "bg-amber-950/60 border-amber-500/40 text-amber-400" : "bg-red-950/60 border-[#E3262E]/60 text-[#E3262E]";
       this.container.innerHTML = `
-      <div class="fixed inset-0 z-50 overflow-hidden">
+      <div class="fixed inset-0 z-50 overflow-hidden font-mono">
         
         <!-- Backdrop Overlay -->
-        <div id="drawer-backdrop" class="absolute inset-0 bg-black/70 backdrop-blur-sm drawer-overlay cursor-pointer"></div>
+        <div id="drawer-backdrop" class="absolute inset-0 bg-black/80 backdrop-blur-sm cursor-pointer"></div>
 
         <!-- Slide-Over Drawer Container -->
         <div class="fixed inset-y-0 right-0 max-w-full flex pl-10">
-          <div class="w-screen max-w-xl bg-[#141924] border-l border-[#1F2937] text-white flex flex-col shadow-2xl drawer-content">
+          <div class="w-screen max-w-xl bg-[#0A0A0C] border-l border-[#1F2937] text-white flex flex-col shadow-2xl">
             
             <!-- Drawer Header -->
-            <div class="p-6 bg-[#0A0E14] border-b border-[#1F2937] flex items-start justify-between">
-              <div class="space-y-1 pr-4">
+            <div class="p-6 bg-[#050505] border-b border-[#1F2937] flex items-start justify-between">
+              <div class="space-y-1.5 pr-4">
                 <div class="flex items-center space-x-2">
-                  <span class="px-2.5 py-0.5 rounded text-[11px] font-mono border ${accentBg}">
+                  <span class="px-2.5 py-0.5 text-[10px] font-mono border uppercase tracking-wider ${accentBg}">
                     ${isCivic ? "Civic Issue \xB7 Seeded Data" : "Opportunity Cluster"}
                   </span>
-                  <span class="text-xs text-[#94A3B8] font-mono">${this.signal.city}</span>
+                  <span class="text-xs text-[#8A8A8A] font-mono uppercase">${this.signal.city}</span>
                 </div>
-                <h3 class="text-xl font-bold text-white tracking-tight leading-snug">${this.signal.title}</h3>
+                <h3 class="font-serif text-xl font-bold text-white uppercase tracking-tight leading-snug">${this.signal.title}</h3>
               </div>
-              <button id="drawer-close-btn" class="p-2 rounded-lg text-[#94A3B8] hover:text-white hover:bg-[#1F2937] transition" aria-label="Close drawer">
+              <button id="drawer-close-btn" class="p-2 text-[#8A8A8A] hover:text-white hover:bg-[#1F2937] transition" aria-label="Close drawer">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
               </button>
             </div>
 
-            <!-- Emergence Score Badge + Gloss Banner (Section 2 Requirement) -->
-            <div class="p-4 bg-[#0F141C] border-b border-[#1F2937] flex items-center justify-between gap-4">
+            <!-- Emergence Score Badge + Gloss Banner -->
+            <div class="p-4 bg-[#050505] border-b border-[#1F2937] flex items-center justify-between gap-4">
               <div class="flex items-center space-x-3">
-                <div class="px-3.5 py-2 rounded-xl bg-[#141924] border border-[#1F2937] font-mono text-center">
-                  <div class="text-[10px] text-[#94A3B8] uppercase">S_emergence</div>
+                <div class="px-3.5 py-2 bg-[#0A0A0C] border border-[#1F2937] font-mono text-center">
+                  <div class="text-[10px] text-[#8A8A8A] uppercase">S_emergence</div>
                   <div class="text-xl font-extrabold" style="color: ${accentColor}">${this.signal.emergenceScore.toFixed(2)}</div>
                 </div>
                 <div>
-                  <div class="text-xs font-bold text-white flex items-center space-x-1.5">
-                    <span>Signal Velocity: <strong style="color: ${accentColor}">${this.signal.signalVelocity}</strong></span>
+                  <div class="text-xs font-bold text-white flex items-center space-x-1.5 font-mono">
+                    <span>SIGNAL VELOCITY: <strong style="color: ${accentColor}">${this.signal.signalVelocity}</strong></span>
                     <span class="text-[11px] font-mono text-emerald-400 font-semibold">${this.signal.scoreChange}</span>
                   </div>
-                  <!-- One-Line Plain-Language Gloss -->
-                  <div class="text-xs text-[#94A3B8] mt-0.5 italic">
+                  <div class="text-xs text-[#8A8A8A] mt-0.5 italic font-mono">
                     "${this.signal.confidenceGloss}"
                   </div>
                 </div>
@@ -364,35 +363,31 @@
             </div>
 
             <!-- Navigation Tabs -->
-            <div class="flex border-b border-[#1F2937] bg-[#0A0E14] px-6 text-xs font-medium">
-              <button id="tab-overview" class="py-3 px-4 border-b-2 font-mono transition ${this.activeTab === "overview" ? "border-emerald-500 text-white font-bold" : "border-transparent text-[#94A3B8] hover:text-white"}">
-                Overview &amp; Radar
+            <div class="flex border-b border-[#1F2937] bg-[#050505] px-6 text-xs font-mono">
+              <button id="tab-overview" class="py-3 px-4 border-b-2 uppercase transition ${this.activeTab === "overview" ? "border-[#E3262E] text-white font-bold" : "border-transparent text-[#8A8A8A] hover:text-white"}">
+                Overview &amp; Metrics
               </button>
-              <button id="tab-sources" class="py-3 px-4 border-b-2 font-mono transition ${this.activeTab === "sources" ? "border-emerald-500 text-white font-bold" : "border-transparent text-[#94A3B8] hover:text-white"}">
+              <button id="tab-sources" class="py-3 px-4 border-b-2 uppercase transition ${this.activeTab === "sources" ? "border-[#E3262E] text-white font-bold" : "border-transparent text-[#8A8A8A] hover:text-white"}">
                 Sources (${this.signal.sources ? this.signal.sources.length : 0})
               </button>
-              <button id="tab-timeline" class="py-3 px-4 border-b-2 font-mono transition ${this.activeTab === "timeline" ? "border-emerald-500 text-white font-bold" : "border-transparent text-[#94A3B8] hover:text-white"}">
+              <button id="tab-timeline" class="py-3 px-4 border-b-2 uppercase transition ${this.activeTab === "timeline" ? "border-[#E3262E] text-white font-bold" : "border-transparent text-[#8A8A8A] hover:text-white"}">
                 Timeline
               </button>
-              <button id="tab-json" class="py-3 px-4 border-b-2 font-mono transition ${this.activeTab === "json" ? "border-emerald-500 text-white font-bold" : "border-transparent text-[#94A3B8] hover:text-white"}">
+              <button id="tab-json" class="py-3 px-4 border-b-2 uppercase transition ${this.activeTab === "json" ? "border-[#E3262E] text-white font-bold" : "border-transparent text-[#8A8A8A] hover:text-white"}">
                 Raw JSON
               </button>
             </div>
 
-            <!-- Drawer Scrollable Content -->
+            <!-- Tab Content Body -->
             <div class="flex-1 overflow-y-auto p-6 space-y-6">
               ${this.renderTabContent()}
             </div>
 
-            <!-- Drawer Footer Actions -->
-            <div class="p-4 bg-[#0A0E14] border-t border-[#1F2937] flex items-center justify-between gap-3">
-              <button id="track-cluster-btn" class="flex-1 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-[#0A0E14] font-semibold text-xs transition flex items-center justify-center space-x-1.5 shadow-md shadow-emerald-500/10">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                <span>Track Cluster Alerts</span>
-              </button>
-              <button id="inspect-source-btn" class="flex-1 py-2.5 rounded-xl bg-[#1F2937] hover:bg-gray-700 text-white font-medium text-xs border border-[#1F2937] transition flex items-center justify-center space-x-1.5">
-                <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-                <span>Inspect Collector Health</span>
+            <!-- Drawer Footer -->
+            <div class="p-4 bg-[#050505] border-t border-[#1F2937] flex items-center justify-between text-xs font-mono">
+              <span class="text-[#8A8A8A]">Updated: ${this.signal.lastUpdated || "2 mins ago"}</span>
+              <button id="drawer-inspect-pipeline-btn" class="px-3 py-1.5 bg-[#E3262E] text-white font-bold uppercase transition hover:bg-[#C11B22]">
+                Inspect Pipeline Health \u2192
               </button>
             </div>
 
@@ -405,123 +400,113 @@
     renderTabContent() {
       if (this.activeTab === "sources") {
         return `
-        <div class="space-y-4">
-          <h4 class="text-xs font-mono font-bold text-white uppercase tracking-wider">Scraped &amp; Ingested Data Sources</h4>
-          <div class="space-y-3">
-            ${(this.signal.sources || []).map((s) => `
-              <div class="p-3.5 rounded-xl bg-[#0A0E14] border border-[#1F2937] flex items-center justify-between">
-                <div>
-                  <div class="text-xs font-bold text-white">${s.name}</div>
-                  <div class="text-[11px] text-[#94A3B8] font-mono mt-0.5">Type: ${s.type} \xB7 ${s.count} records synthesized</div>
-                </div>
-                <span class="text-[10px] px-2 py-0.5 rounded font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                  ${s.status}
-                </span>
+        <div class="space-y-3 font-mono">
+          <div class="text-xs text-[#8A8A8A] uppercase tracking-wider">Ingested Public Sources (${this.signal.sources.length})</div>
+          ${this.signal.sources.map((src) => `
+            <div class="p-4 bg-[#050505] border border-[#1F2937] space-y-1">
+              <div class="flex items-center justify-between text-xs">
+                <span class="font-bold text-white">${src.name}</span>
+                <span class="px-2 py-0.5 text-[10px] bg-[#0A0A0C] border border-[#1F2937] text-emerald-400 font-mono">${src.status}</span>
               </div>
-            `).join("")}
-          </div>
+              <div class="text-xs text-[#8A8A8A] flex justify-between pt-1">
+                <span>Category: ${src.type}</span>
+                <span>Signal Count: <strong>${src.count}</strong></span>
+              </div>
+            </div>
+          `).join("")}
         </div>
       `;
       }
       if (this.activeTab === "timeline") {
         return `
-        <div class="space-y-4">
-          <h4 class="text-xs font-mono font-bold text-white uppercase tracking-wider">Cluster Convergence Sequence</h4>
-          <div class="relative pl-6 space-y-6 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-[#1F2937]">
-            ${(this.signal.timeline || []).map((t) => `
-              <div class="relative">
-                <div class="absolute -left-6 top-1 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-[#141924]"></div>
-                <div class="text-[11px] font-mono text-emerald-400 font-semibold">${t.timestamp}</div>
-                <div class="text-xs text-[#F3F4F6] mt-0.5 leading-relaxed">${t.label}</div>
+        <div class="space-y-4 font-mono">
+          <div class="text-xs text-[#8A8A8A] uppercase tracking-wider">Chronological Evidence Trail</div>
+          <div class="space-y-3 relative before:absolute before:left-3 before:top-2 before:bottom-2 before:w-0.5 before:bg-[#1F2937]">
+            ${this.signal.timeline ? this.signal.timeline.map((t) => `
+              <div class="relative pl-7 space-y-0.5">
+                <div class="absolute left-1.5 top-1.5 w-3 h-3 rounded-full bg-[#E3262E] border-2 border-[#050505]"></div>
+                <div class="text-[10px] text-[#E3262E] font-mono">${t.timestamp}</div>
+                <div class="text-xs text-white leading-relaxed font-mono">${t.label}</div>
               </div>
-            `).join("")}
+            `).join("") : '<div class="text-xs text-[#8A8A8A]">No timeline data recorded.</div>'}
           </div>
         </div>
       `;
       }
       if (this.activeTab === "json") {
         return `
-        <div class="space-y-3">
-          <div class="flex items-center justify-between text-xs font-mono text-[#94A3B8]">
-            <span>Raw Normalized JSON Payload</span>
-            <span class="text-emerald-400">JSON Schema v2.1</span>
-          </div>
-          <pre class="terminal-font text-xs text-emerald-300 p-4 rounded-xl bg-[#0A0E14] border border-[#1F2937] overflow-x-auto max-h-96 leading-relaxed"><code>${JSON.stringify(this.signal.rawPayload, null, 2)}</code></pre>
+        <div class="space-y-2 font-mono">
+          <div class="text-xs text-[#8A8A8A] uppercase tracking-wider">Raw Collector Ingestion Payload</div>
+          <pre class="p-4 bg-[#050505] border border-[#1F2937] text-xs text-emerald-400 overflow-x-auto rounded-none font-mono">${JSON.stringify(this.signal.rawPayload || this.signal, null, 2)}</pre>
         </div>
       `;
       }
-      const m = this.signal.radarMetrics || { diversity: 80, velocity: 85, density: 90, recency: 88 };
+      const m = this.signal.radarMetrics || { diversity: 85, velocity: 80, density: 90, recency: 88 };
       return `
-      <div class="space-y-6">
-        
-        <!-- Metrics Grid -->
-        <div class="grid grid-cols-2 gap-3">
-          <div class="p-3.5 rounded-xl bg-[#0A0E14] border border-[#1F2937]">
-            <div class="text-[11px] text-[#94A3B8] font-mono">Source Diversity</div>
-            <div class="text-xl font-bold font-mono text-white mt-1">${m.diversity}%</div>
-            <div class="w-full bg-[#1F2937] h-1.5 rounded-full mt-2 overflow-hidden">
-              <div class="bg-emerald-500 h-full rounded-full" style="width: ${m.diversity}%"></div>
+      <div class="space-y-6 font-mono">
+        <div class="space-y-3">
+          <div class="text-xs text-[#8A8A8A] uppercase tracking-wider">Spatio-Temporal Convergence Density</div>
+          <div class="grid grid-cols-2 gap-3">
+            <div class="p-3 bg-[#050505] border border-[#1F2937]">
+              <div class="text-[10px] text-[#8A8A8A]">SOURCE DIVERSITY</div>
+              <div class="text-lg font-bold text-white">${m.diversity}%</div>
             </div>
-          </div>
-          
-          <div class="p-3.5 rounded-xl bg-[#0A0E14] border border-[#1F2937]">
-            <div class="text-[11px] text-[#94A3B8] font-mono">Signal Velocity</div>
-            <div class="text-xl font-bold font-mono text-white mt-1">${m.velocity}%</div>
-            <div class="w-full bg-[#1F2937] h-1.5 rounded-full mt-2 overflow-hidden">
-              <div class="bg-indigo-400 h-full rounded-full" style="width: ${m.velocity}%"></div>
+            <div class="p-3 bg-[#050505] border border-[#1F2937]">
+              <div class="text-[10px] text-[#8A8A8A]">SIGNAL VELOCITY</div>
+              <div class="text-lg font-bold text-[#E3262E]">${m.velocity}%</div>
             </div>
-          </div>
-
-          <div class="p-3.5 rounded-xl bg-[#0A0E14] border border-[#1F2937]">
-            <div class="text-[11px] text-[#94A3B8] font-mono">Spatial Density</div>
-            <div class="text-xl font-bold font-mono text-white mt-1">${m.density}%</div>
-            <div class="w-full bg-[#1F2937] h-1.5 rounded-full mt-2 overflow-hidden">
-              <div class="bg-amber-400 h-full rounded-full" style="width: ${m.density}%"></div>
+            <div class="p-3 bg-[#050505] border border-[#1F2937]">
+              <div class="text-[10px] text-[#8A8A8A]">SPATIAL DENSITY</div>
+              <div class="text-lg font-bold text-white">${m.density}%</div>
             </div>
-          </div>
-
-          <div class="p-3.5 rounded-xl bg-[#0A0E14] border border-[#1F2937]">
-            <div class="text-[11px] text-[#94A3B8] font-mono">Recency Score</div>
-            <div class="text-xl font-bold font-mono text-white mt-1">${m.recency}%</div>
-            <div class="w-full bg-[#1F2937] h-1.5 rounded-full mt-2 overflow-hidden">
-              <div class="bg-teal-400 h-full rounded-full" style="width: ${m.recency}%"></div>
+            <div class="p-3 bg-[#050505] border border-[#1F2937]">
+              <div class="text-[10px] text-[#8A8A8A]">RECENCY DECAY</div>
+              <div class="text-lg font-bold text-white">${m.recency}%</div>
             </div>
           </div>
         </div>
 
-        <!-- Primary Data Summary -->
-        <div class="p-4 rounded-xl bg-[#0A0E14] border border-[#1F2937] space-y-2">
-          <h4 class="text-xs font-mono font-bold text-white uppercase tracking-wider">Spatial Convergence Assessment</h4>
-          <p class="text-xs text-[#94A3B8] leading-relaxed">
-            Multi-source anomaly detector registered simultaneous hiring spikes, commercial permit applications, and regulatory filings within a 2.4km radius in ${this.signal.city}.
-          </p>
+        <div class="space-y-2">
+          <div class="text-xs text-[#8A8A8A] uppercase tracking-wider">Scraper Collector Origin</div>
+          <div class="p-4 bg-[#050505] border border-[#1F2937] text-xs space-y-1 text-[#8A8A8A]">
+            <div>Collector ID: <strong class="text-white font-mono">${this.signal.rawPayload ? this.signal.rawPayload.primary_collector || "brightdata_job_harvester_v2" : "brightdata_harvester"}</strong></div>
+            <div>Source Categories Ingested: <strong class="text-white font-mono">${this.signal.category}</strong></div>
+          </div>
         </div>
-
       </div>
     `;
     }
     attachEvents() {
       const backdrop = this.container.querySelector("#drawer-backdrop");
       const closeBtn = this.container.querySelector("#drawer-close-btn");
-      const inspectBtn = this.container.querySelector("#inspect-source-btn");
-      const trackBtn = this.container.querySelector("#track-cluster-btn");
+      const inspectBtn = this.container.querySelector("#drawer-inspect-pipeline-btn");
       if (backdrop) backdrop.addEventListener("click", () => this.close());
       if (closeBtn) closeBtn.addEventListener("click", () => this.close());
-      if (inspectBtn) inspectBtn.addEventListener("click", () => {
-        this.close();
-        this.onInspectPipeline();
+      if (inspectBtn) {
+        inspectBtn.addEventListener("click", () => {
+          this.close();
+          this.onInspectPipeline();
+        });
+      }
+      const tabOverview = this.container.querySelector("#tab-overview");
+      const tabSources = this.container.querySelector("#tab-sources");
+      const tabTimeline = this.container.querySelector("#tab-timeline");
+      const tabJson = this.container.querySelector("#tab-json");
+      if (tabOverview) tabOverview.addEventListener("click", () => {
+        this.activeTab = "overview";
+        this.render();
       });
-      if (trackBtn) trackBtn.addEventListener("click", () => {
-        alert(`Cluster "${this.signal.title}" is now added to active spatial watchlist.`);
+      if (tabSources) tabSources.addEventListener("click", () => {
+        this.activeTab = "sources";
+        this.render();
       });
-      ["overview", "sources", "timeline", "json"].forEach((tabKey) => {
-        const tabBtn = this.container.querySelector(`#tab-${tabKey}`);
-        if (tabBtn) {
-          tabBtn.addEventListener("click", () => {
-            this.activeTab = tabKey;
-            this.render();
-          });
-        }
+      if (tabTimeline) tabTimeline.addEventListener("click", () => {
+        this.activeTab = "timeline";
+        this.render();
+      });
+      if (tabJson) tabJson.addEventListener("click", () => {
+        this.activeTab = "json";
+        this.render();
       });
     }
   };
@@ -555,17 +540,17 @@
       const isCivic = this.activeMode === "civic";
       const categories = getCategories(this.activeMode);
       this.container.innerHTML = `
-      <div class="topographic-bg min-h-[calc(100vh-64px)] flex flex-col">
+      <div class="bg-[#050505] flex flex-col font-mono">
         
-        <!-- Live Signal Ticker Banner (Section 2 Requirement: pause-on-hover, 1 line, text-muted) -->
-        <div class="bg-[#0A0E14] border-b border-[#1F2937] px-4 py-2 text-xs text-[#94A3B8] ticker-wrap">
+        <!-- Live Signal Ticker Banner -->
+        <div class="bg-[#0A0A0C] border-b border-[#1F2937] px-4 py-2 text-xs text-[#8A8A8A] ticker-wrap">
           <div class="ticker-move flex items-center space-x-8 font-mono">
             <span class="inline-flex items-center space-x-2">
-              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-              <strong class="text-white">Austin, TX:</strong> Quantum Compute R&D Campus S_emergence=8.42 (+140%)
+              <span class="w-2 h-2 rounded-full bg-[#E3262E] animate-pulse"></span>
+              <strong class="text-white">Austin, TX:</strong> Quantum Compute R&amp;D Campus S_emergence=8.42 (+140%)
             </span>
             <span class="inline-flex items-center space-x-2">
-              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span class="w-2 h-2 rounded-full bg-[#E3262E] animate-pulse"></span>
               <strong class="text-white">San Jose, CA:</strong> AV Testing Hub S_emergence=9.15 (+210%)
             </span>
             <span class="inline-flex items-center space-x-2">
@@ -573,55 +558,51 @@
               <strong class="text-white">Austin, TX (Civic Seeded):</strong> South End Drainage S_emergence=8.10 (+115%)
             </span>
             <span class="inline-flex items-center space-x-2">
-              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span class="w-2 h-2 rounded-full bg-[#E3262E] animate-pulse"></span>
               <strong class="text-white">Seattle, WA:</strong> AI Micro-Data Center Substation S_emergence=8.90 (+175%)
             </span>
           </div>
         </div>
 
         <!-- Toolbar Controls & Mode Switcher -->
-        <div class="bg-[#141924]/90 border-b border-[#1F2937] px-4 lg:px-8 py-3.5 space-y-3">
+        <div class="bg-[#0A0A0C] border-b border-[#1F2937] px-4 lg:px-8 py-3.5 space-y-3">
           <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
             
             <!-- Dual-Mode Switcher Toggle -->
-            <div class="flex items-center bg-[#0A0E14] p-1 rounded-xl border border-[#1F2937] w-full md:w-auto">
-              <button id="mode-btn-opp" class="flex-1 md:flex-initial px-4 py-1.5 rounded-lg text-xs font-semibold transition flex items-center justify-center space-x-2 ${!isCivic ? "bg-emerald-500 text-[#0A0E14] shadow-sm" : "text-[#94A3B8] hover:text-white"}">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                <span>Opportunities Mode</span>
-                <span class="text-[10px] px-1.5 py-0.2 rounded font-mono ${!isCivic ? "bg-emerald-950/60 text-emerald-100" : "bg-[#1F2937] text-gray-400"}">Live Scraped</span>
+            <div class="flex items-center bg-[#050505] p-1 border border-[#1F2937] w-full md:w-auto">
+              <button id="mode-btn-opp" class="flex-1 md:flex-initial px-4 py-1.5 text-xs font-mono font-bold uppercase transition flex items-center justify-center space-x-2 ${!isCivic ? "bg-[#E3262E] text-white shadow-sm" : "text-[#8A8A8A] hover:text-white"}">
+                <span>OPPORTUNITIES (LIVE SCRAPED)</span>
               </button>
 
-              <button id="mode-btn-civic" class="flex-1 md:flex-initial px-4 py-1.5 rounded-lg text-xs font-semibold transition flex items-center justify-center space-x-2 ${isCivic ? "bg-amber-500 text-[#0A0E14] shadow-sm" : "text-[#94A3B8] hover:text-white"}">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
-                <span>Civic Issues Mode</span>
-                <span class="text-[10px] px-1.5 py-0.2 rounded font-mono ${isCivic ? "bg-amber-950/60 text-amber-100" : "bg-[#1F2937] text-gray-400"}">Seeded Demo</span>
+              <button id="mode-btn-civic" class="flex-1 md:flex-initial px-4 py-1.5 text-xs font-mono font-bold uppercase transition flex items-center justify-center space-x-2 ${isCivic ? "bg-amber-500 text-black shadow-sm" : "text-[#8A8A8A] hover:text-white"}">
+                <span>CIVIC ISSUES (SEEDED DEMO)</span>
               </button>
             </div>
 
             <!-- Filters Row -->
-            <div class="flex flex-wrap items-center gap-3 w-full md:w-auto text-xs">
+            <div class="flex flex-wrap items-center gap-3 w-full md:w-auto text-xs font-mono">
               
               <!-- City Selector -->
-              <div class="flex items-center space-x-1.5 bg-[#0A0E14] px-3 py-1.5 rounded-xl border border-[#1F2937]">
-                <span class="text-[#94A3B8]">City:</span>
-                <select id="filter-city" class="bg-transparent text-white border-none focus:ring-0 font-medium cursor-pointer">
-                  ${getCities().map((c) => `<option value="${c}" ${this.filters.city === c ? "selected" : ""} class="bg-[#141924] text-white">${c === "all" ? "All Metros" : c}</option>`).join("")}
+              <div class="flex items-center space-x-1.5 bg-[#050505] px-3 py-1.5 border border-[#1F2937]">
+                <span class="text-[#8A8A8A]">CITY:</span>
+                <select id="filter-city" class="bg-transparent text-white border-none focus:ring-0 font-mono uppercase cursor-pointer">
+                  ${getCities().map((c) => `<option value="${c}" ${this.filters.city === c ? "selected" : ""} class="bg-[#0A0A0C] text-white">${c === "all" ? "ALL METROS" : c}</option>`).join("")}
                 </select>
               </div>
 
               <!-- Category Filter -->
-              <div class="flex items-center space-x-1.5 bg-[#0A0E14] px-3 py-1.5 rounded-xl border border-[#1F2937]">
-                <span class="text-[#94A3B8]">Category:</span>
-                <select id="filter-category" class="bg-transparent text-white border-none focus:ring-0 font-medium cursor-pointer">
-                  ${categories.map((cat) => `<option value="${cat}" ${this.filters.category === cat ? "selected" : ""} class="bg-[#141924] text-white">${cat === "all" ? "All Categories" : cat}</option>`).join("")}
+              <div class="flex items-center space-x-1.5 bg-[#050505] px-3 py-1.5 border border-[#1F2937]">
+                <span class="text-[#8A8A8A]">CATEGORY:</span>
+                <select id="filter-category" class="bg-transparent text-white border-none focus:ring-0 font-mono uppercase cursor-pointer">
+                  ${categories.map((cat) => `<option value="${cat}" ${this.filters.category === cat ? "selected" : ""} class="bg-[#0A0A0C] text-white">${cat === "all" ? "ALL CATEGORIES" : cat}</option>`).join("")}
                 </select>
               </div>
 
               <!-- Emergence Slider -->
-              <div class="flex items-center space-x-2 bg-[#0A0E14] px-3 py-1.5 rounded-xl border border-[#1F2937]">
-                <span class="text-[#94A3B8]">Min S_emergence:</span>
-                <input type="range" id="filter-score" min="0" max="10" step="0.5" value="${this.filters.minScore}" class="w-20 accent-emerald-500 cursor-pointer">
-                <span id="filter-score-val" class="font-mono text-emerald-400 font-bold w-6 text-right">${this.filters.minScore}</span>
+              <div class="flex items-center space-x-2 bg-[#050505] px-3 py-1.5 border border-[#1F2937]">
+                <span class="text-[#8A8A8A]">MIN S_EMERGENCE:</span>
+                <input type="range" id="filter-score" min="0" max="10" step="0.5" value="${this.filters.minScore}" class="w-20 accent-[#E3262E] cursor-pointer">
+                <span id="filter-score-val" class="font-mono text-[#E3262E] font-bold w-6 text-right">${this.filters.minScore}</span>
               </div>
 
             </div>
@@ -630,39 +611,34 @@
         </div>
 
         <!-- Main Map Area -->
-        <div class="relative flex-1 min-h-[550px] w-full flex flex-col">
+        <div class="relative flex-1 min-h-[520px] w-full flex flex-col mt-4">
           
           <!-- Leaflet / Vector Spatial Map Container -->
-          <div id="map-container" class="absolute inset-0 z-0 bg-[#0A0E14] overflow-hidden"></div>
+          <div id="map-container" class="map-canvas-container"></div>
 
-          <!-- Empty State Overlay (Section 2 Requirement) -->
-          <div id="map-empty-state" class="${this.currentDataset.length > 0 ? "hidden" : ""} absolute inset-0 z-10 bg-[#0A0E14]/85 backdrop-blur-sm flex items-center justify-center p-6 text-center">
-            <div class="max-w-md p-8 rounded-2xl bg-[#141924] border border-[#1F2937] space-y-3 shadow-2xl">
-              <div class="w-12 h-12 mx-auto rounded-full bg-[#1F2937] flex items-center justify-center text-gray-400">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-              </div>
-              <h3 class="text-base font-bold text-white">No convergence detected yet</h3>
-              <p class="text-xs text-[#94A3B8]">Signals accumulate as collectors run. Try lowering the emergence score threshold filter above.</p>
-              <button id="reset-filters-btn" class="px-4 py-2 rounded-lg bg-emerald-500 text-[#0A0E14] text-xs font-bold transition hover:bg-emerald-400">
-                Reset Threshold Filter
+          <!-- Empty State Overlay -->
+          <div id="map-empty-state" class="${this.currentDataset.length > 0 ? "hidden" : ""} absolute inset-0 z-10 bg-[#050505]/90 backdrop-blur-sm flex items-center justify-center p-6 text-center">
+            <div class="max-w-md p-8 bg-[#0A0A0C] border border-[#1F2937] space-y-3 shadow-2xl">
+              <h3 class="text-base font-bold font-serif text-white uppercase">NO CONVERGENCE DETECTED YET</h3>
+              <p class="text-xs text-[#8A8A8A] font-mono">Signals accumulate as collectors run. Try lowering the emergence score threshold filter above.</p>
+              <button id="reset-filters-btn" class="px-4 py-2 bg-[#E3262E] text-white text-xs font-mono font-bold uppercase transition hover:bg-[#C11B22]">
+                RESET THRESHOLD FILTER
               </button>
             </div>
           </div>
-
-          <!-- Drawer Mounting Container -->
-          <div id="drawer-container"></div>
 
         </div>
 
       </div>
     `;
       this.attachEvents();
-      this.initMap(this.currentDataset);
+      this.initMap();
     }
-    initMap(dataset) {
+    initMap() {
       setTimeout(() => {
         const mapEl = document.getElementById("map-container");
         if (!mapEl) return;
+        const dataset = this.currentDataset;
         if (typeof L !== "undefined") {
           try {
             if (!this.map) {
@@ -698,15 +674,15 @@
         const coords = item.coordinates;
         bounds.push(coords);
         const pulseClass = isCivic ? "marker-pulse-civic" : "marker-pulse-opp";
-        const badgeBg = isCivic ? "bg-amber-500" : "bg-emerald-500";
+        const borderColor = isCivic ? "border-amber-400 text-amber-400" : "border-[#E3262E] text-[#E3262E]";
         const customIcon = L.divIcon({
           className: "custom-map-marker",
           html: `
           <div class="relative group cursor-pointer" data-id="${item.id}">
-            <div class="w-10 h-10 rounded-full ${badgeBg}/20 border-2 ${isCivic ? "border-amber-400 text-amber-400" : "border-emerald-400 text-emerald-400"} ${pulseClass} flex items-center justify-center font-mono text-xs font-bold shadow-lg">
+            <div class="w-10 h-10 rounded-full bg-[#050505]/90 border-2 ${borderColor} ${pulseClass} flex items-center justify-center font-mono text-xs font-bold shadow-2xl">
               ${item.emergenceScore.toFixed(1)}
             </div>
-            <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block bg-[#0A0E14] text-white text-[11px] font-medium px-3 py-1.5 rounded-lg border border-[#1F2937] whitespace-nowrap z-50 shadow-xl">
+            <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block bg-[#0A0A0C] text-white text-[11px] font-mono px-3 py-1.5 border border-[#1F2937] whitespace-nowrap z-50 shadow-xl">
               ${item.title} (${item.city})
             </div>
           </div>
@@ -723,7 +699,7 @@
     }
     renderVectorSpatialMap(dataset, container) {
       const isCivic = this.activeMode === "civic";
-      const accentColor = isCivic ? "#F59E0B" : "#22C55E";
+      const accentColor = isCivic ? "#F59E0B" : "#E3262E";
       const pulseClass = isCivic ? "marker-pulse-civic" : "marker-pulse-opp";
       const cityPositions = {
         "Austin, TX": { left: "45%", top: "65%" },
@@ -732,53 +708,47 @@
         "Boston, MA": { left: "80%", top: "35%" }
       };
       container.innerHTML = `
-      <div class="relative w-full h-full bg-[#0A0E14] overflow-hidden flex flex-col justify-between p-6">
+      <div class="relative w-full h-full bg-[#080808] overflow-hidden flex flex-col justify-between p-6">
         
-        <!-- Topo grid SVG overlay -->
-        <svg class="absolute inset-0 w-full h-full opacity-30 pointer-events-none" xmlns="http://www.w3.org/2000/svg">
+        <svg class="absolute inset-0 w-full h-full opacity-20 pointer-events-none" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
               <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1F2937" stroke-width="1"/>
             </pattern>
           </defs>
           <rect width="100%" height="100%" fill="url(#grid)" />
-          <!-- Contour lines -->
-          <path d="M 100 200 Q 300 100 600 300 T 1100 200" fill="none" stroke="#818CF8" stroke-opacity="0.15" stroke-width="2"/>
-          <path d="M 150 400 Q 400 250 700 450 T 1200 350" fill="none" stroke="#22C55E" stroke-opacity="0.1" stroke-width="2"/>
+          <path d="M 100 200 Q 300 100 600 300 T 1100 200" fill="none" stroke="#E3262E" stroke-opacity="0.2" stroke-width="2"/>
         </svg>
 
-        <!-- Legend / Map Status Header -->
-        <div class="relative z-10 flex items-center justify-between text-xs font-mono text-[#94A3B8]">
-          <div class="flex items-center space-x-2 bg-[#141924]/90 px-3 py-1.5 rounded-xl border border-[#1F2937]">
+        <div class="relative z-10 flex items-center justify-between text-xs font-mono text-[#8A8A8A]">
+          <div class="flex items-center space-x-2 bg-[#0A0A0C] px-3 py-1.5 border border-[#1F2937]">
             <span class="w-2 h-2 rounded-full" style="background-color: ${accentColor}"></span>
-            <span class="text-white font-bold">${isCivic ? "Civic Issues Mode (Seeded Data)" : "Opportunities Mode (Live Scraped)"}</span>
+            <span class="text-white font-bold">${isCivic ? "CIVIC ISSUES MODE (SEEDED DATA)" : "OPPORTUNITIES MODE (LIVE SCRAPED)"}</span>
           </div>
-          <div class="bg-[#141924]/90 px-3 py-1.5 rounded-xl border border-[#1F2937]">
-            Showing <strong class="text-white">${dataset.length}</strong> spatial clusters
+          <div class="bg-[#0A0A0C] px-3 py-1.5 border border-[#1F2937]">
+            SHOWING <strong class="text-white">${dataset.length}</strong> SPATIAL CLUSTERS
           </div>
         </div>
 
-        <!-- Interactive Spatial Markers Container -->
         <div class="relative z-10 flex-1 my-4">
           ${dataset.map((item) => {
         const pos = cityPositions[item.city] || { left: "50%", top: "50%" };
         return `
               <div class="absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer group" style="left: ${pos.left}; top: ${pos.top};" data-marker-id="${item.id}">
-                <div class="w-12 h-12 rounded-full border-2 ${pulseClass} flex items-center justify-center font-mono text-xs font-bold shadow-2xl transition hover:scale-110" style="background-color: rgba(10,14,20,0.9); border-color: ${accentColor}; color: ${accentColor}">
+                <div class="w-12 h-12 rounded-full border-2 ${pulseClass} flex items-center justify-center font-mono text-xs font-bold shadow-2xl transition hover:scale-110" style="background-color: rgba(5,5,5,0.9); border-color: ${accentColor}; color: ${accentColor}">
                   ${item.emergenceScore.toFixed(1)}
                 </div>
-                <div class="mt-2 bg-[#141924]/95 text-white text-xs font-medium px-3 py-2 rounded-xl border border-[#1F2937] shadow-xl text-center whitespace-nowrap">
-                  <div class="font-bold text-white">${item.title}</div>
-                  <div class="text-[11px] text-[#94A3B8] font-mono">${item.city} \xB7 ${item.scoreChange}</div>
+                <div class="mt-2 bg-[#0A0A0C] text-white text-xs font-mono px-3 py-2 border border-[#1F2937] shadow-xl text-center whitespace-nowrap">
+                  <div class="font-bold text-white uppercase">${item.title}</div>
+                  <div class="text-[11px] text-[#8A8A8A] font-mono">${item.city} \u2022 ${item.scoreChange}</div>
                 </div>
               </div>
             `;
       }).join("")}
         </div>
 
-        <!-- Vector Footer Note -->
-        <div class="relative z-10 text-[11px] text-[#94A3B8] font-mono text-center">
-          Click any cluster node above to open spatial breakdown &amp; raw JSON payload drawer.
+        <div class="relative z-10 text-[11px] text-[#8A8A8A] font-mono text-center uppercase tracking-wider">
+          Click any cluster node above to inspect spatial breakdown &amp; raw payload drawer.
         </div>
 
       </div>
@@ -793,7 +763,7 @@
     openDrawer(signal) {
       if (!this.drawer) {
         this.drawer = new SignalDrawer("drawer-container", {
-          onInspectPipeline: () => this.onNavigate("pipeline")
+          onInspectPipeline: () => this.onNavigate("scene-03")
         });
       }
       this.drawer.open(signal);
@@ -1020,12 +990,9 @@
       if (!this.container) return;
       if (!this.brokenPayload) {
         this.container.innerHTML = `
-        <div class="bg-[#141924] rounded-2xl border border-[#1F2937] p-8 text-center text-[#94A3B8]">
-          <div class="w-12 h-12 mx-auto rounded-full bg-[#1F2937] flex items-center justify-center text-gray-400 mb-3">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
-          </div>
-          <h4 class="text-sm font-semibold text-white">Payload Diff Inspector Idle</h4>
-          <p class="text-xs mt-1">Simulate a scraper DOM drift incident above to inspect side-by-side payload transformations.</p>
+        <div class="bg-[#050505] border border-[#1F2937] p-8 text-center text-[#8A8A8A] font-mono">
+          <div class="text-xs uppercase font-bold text-white mb-1">Payload Diff Inspector Idle</div>
+          <p class="text-xs">Simulate a scraper DOM drift incident above to inspect side-by-side payload transformations.</p>
         </div>
       `;
         return;
@@ -1033,16 +1000,16 @@
       const brokenStr = JSON.stringify(this.brokenPayload, null, 2);
       const healedStr = this.healedPayload ? JSON.stringify(this.healedPayload, null, 2) : "// Awaiting self-healing agent patch generation...";
       this.container.innerHTML = `
-      <div class="bg-[#141924] rounded-2xl border border-[#1F2937] overflow-hidden shadow-xl">
+      <div class="bg-[#050505] border border-[#1F2937] overflow-hidden font-mono">
         
         <!-- Header -->
-        <div class="bg-[#0A0E14] px-5 py-3 border-b border-[#1F2937] flex items-center justify-between">
+        <div class="bg-[#0A0A0C] px-5 py-3 border-b border-[#1F2937] flex items-center justify-between">
           <div class="flex items-center space-x-2">
             <span class="text-xs font-mono font-bold text-white uppercase tracking-wider">Payload Diff Viewer</span>
-            <span class="text-[10px] px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 font-mono">Side-by-Side</span>
+            <span class="text-[10px] px-2 py-0.5 border border-[#E3262E]/40 text-[#E3262E] font-mono uppercase">Side-by-Side</span>
           </div>
-          <div class="text-xs font-mono text-[#94A3B8]">
-            Collector: <span class="text-emerald-400 font-bold">brightdata_job_harvester_v2</span>
+          <div class="text-xs font-mono text-[#8A8A8A]">
+            COLLECTOR: <span class="text-white font-bold">brightdata_job_harvester_v2</span>
           </div>
         </div>
 
@@ -1050,43 +1017,43 @@
         <div class="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-[#1F2937]">
           
           <!-- Broken Column -->
-          <div class="p-4 bg-[#0A0E14]/70">
+          <div class="p-4 bg-[#050505]">
             <div class="flex items-center justify-between pb-2 mb-3 border-b border-[#1F2937]">
-              <span class="text-xs font-bold font-mono text-red-400 flex items-center space-x-1.5">
-                <span class="w-2 h-2 rounded-full bg-red-500"></span>
+              <span class="text-xs font-bold font-mono text-[#E3262E] flex items-center space-x-1.5 uppercase">
+                <span class="w-2 h-2 rounded-full bg-[#E3262E]"></span>
                 <span>Degraded Input (Broken DOM AST)</span>
               </span>
-              <span class="text-[10px] font-mono text-red-400 bg-red-500/10 px-2 py-0.5 rounded border border-red-500/20">VALIDATION_FAILED</span>
+              <span class="text-[10px] font-mono text-[#E3262E] bg-red-950/40 px-2 py-0.5 border border-[#E3262E]/40 uppercase">VALIDATION_FAILED</span>
             </div>
             
-            <pre class="terminal-font text-xs text-red-200 overflow-x-auto p-3 rounded-lg bg-[#0F141C] border border-red-500/20 leading-relaxed max-h-96"><code>${this.escapeHtml(brokenStr)}</code></pre>
+            <pre class="text-xs text-red-200 overflow-x-auto p-3 bg-[#0A0A0C] border border-[#E3262E]/30 leading-relaxed max-h-96 font-mono"><code>${this.escapeHtml(brokenStr)}</code></pre>
 
-            <div class="mt-3 text-[11px] text-red-400 font-mono bg-red-500/10 p-2.5 rounded-lg border border-red-500/20">
-              \u274C Null value in required spatial key <code class="bg-red-950 px-1 py-0.5 rounded text-white">location_raw</code>. Collector execution halted.
+            <div class="mt-3 text-[11px] text-[#E3262E] font-mono bg-red-950/30 p-2.5 border border-[#E3262E]/40">
+              \u274C Null value in required spatial key <code class="bg-[#050505] px-1 py-0.5 text-white">location_raw</code>. Collector execution halted.
             </div>
           </div>
 
           <!-- Healed Column -->
-          <div class="p-4 bg-[#0A0E14]/70">
+          <div class="p-4 bg-[#050505]">
             <div class="flex items-center justify-between pb-2 mb-3 border-b border-[#1F2937]">
-              <span class="text-xs font-bold font-mono text-emerald-400 flex items-center space-x-1.5">
-                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+              <span class="text-xs font-bold font-mono text-emerald-400 flex items-center space-x-1.5 uppercase">
+                <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
                 <span>Transformed Output (Auto-Healed JSON)</span>
               </span>
-              <span class="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+              <span class="text-[10px] font-mono text-emerald-400 bg-emerald-950/40 px-2 py-0.5 border border-emerald-500/30 uppercase">
                 ${this.healedPayload ? "PASSED_AUTO_HEALED" : "PENDING_REPAIR"}
               </span>
             </div>
 
-            <pre class="terminal-font text-xs text-emerald-200 overflow-x-auto p-3 rounded-lg bg-[#0F141C] border border-emerald-500/20 leading-relaxed max-h-96"><code>${this.escapeHtml(healedStr)}</code></pre>
+            <pre class="text-xs text-emerald-200 overflow-x-auto p-3 bg-[#0A0A0C] border border-emerald-500/30 leading-relaxed max-h-96 font-mono"><code>${this.escapeHtml(healedStr)}</code></pre>
 
             ${this.healedPayload ? `
-              <div class="mt-3 text-[11px] text-emerald-400 font-mono bg-emerald-500/10 p-2.5 rounded-lg border border-emerald-500/20 flex items-center justify-between">
-                <span>\u2705 Repaired key <code class="bg-emerald-950 px-1 py-0.5 rounded text-white">location_raw</code> &amp; fallback selector attached.</span>
-                <span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded">99.4% Match</span>
+              <div class="mt-3 text-[11px] text-emerald-400 font-mono bg-emerald-950/30 p-2.5 border border-emerald-500/40 flex items-center justify-between">
+                <span>\u2705 Repaired key <code class="bg-[#050505] px-1 py-0.5 text-white">location_raw</code> &amp; fallback selector attached.</span>
+                <span class="text-[10px] bg-emerald-950/60 text-emerald-300 px-2 py-0.5 border border-emerald-500/30">99.4% Match</span>
               </div>
             ` : `
-              <div class="mt-3 text-[11px] text-amber-400 font-mono bg-amber-500/10 p-2.5 rounded-lg border border-amber-500/20 animate-pulse">
+              <div class="mt-3 text-[11px] text-amber-400 font-mono bg-amber-950/30 p-2.5 border border-amber-500/40 animate-pulse">
                 \u23F3 Waiting for AI Repair Agent trigger...
               </div>
             `}
@@ -1098,7 +1065,7 @@
     `;
     }
     escapeHtml(str) {
-      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
     }
   };
 
@@ -1122,215 +1089,143 @@
       const isRepairing = state.status === "REPAIRING";
       const isHealedUnapproved = state.status === "HEALED_UNAPPROVED";
       const isHealthy = state.status === "HEALTHY";
-      let statusBadgeColor = "bg-emerald-500/10 text-emerald-400 border-emerald-500/30";
-      let statusLabel = "\u{1F7E2} ALL SYSTEMS HEALTHY (100% OPERATIONAL)";
+      let statusBadgeColor = "bg-emerald-950/40 text-emerald-400 border-emerald-500/30";
+      let statusLabel = "\u{1F7E2} SYSTEM HEALTHY \u2014 ALL 4 COLLECTORS OPERATIONAL (FILL RATE 100%)";
       if (isDegraded) {
-        statusBadgeColor = "bg-red-500/10 text-red-400 border-red-500/30 animate-pulse";
-        statusLabel = "\u{1F534} CRITICAL: DOM SELECTOR DRIFT DETECTED IN BRIGHTDATA SCRAPER";
+        statusBadgeColor = "bg-red-950/60 text-[#E3262E] border-[#E3262E] animate-pulse";
+        statusLabel = "\u{1F534} CRITICAL: DOM SELECTOR DRIFT DETECTED IN BRIGHTDATA COLLECTOR";
       } else if (isRepairing) {
-        statusBadgeColor = "bg-amber-500/10 text-amber-400 border-amber-500/30 animate-pulse";
-        statusLabel = "\u{1F7E1} REPAIRING: GEMINI AI AGENT SYNTHESIZING FALLBACK AST PATCH";
+        statusBadgeColor = "bg-amber-950/60 text-amber-400 border-amber-500/40 animate-pulse";
+        statusLabel = "\u{1F7E1} REPAIRING: GEMINI LLM AGENT SYNTHESIZING AST SELECTOR PATCH";
       } else if (isHealedUnapproved) {
-        statusBadgeColor = "bg-indigo-500/10 text-indigo-300 border-indigo-500/30 animate-pulse";
-        statusLabel = "\u{1F535} AUTO-PATCH READY: SYNTHETIC SELECTOR GENERATED \u2014 APPROVAL PENDING";
+        statusBadgeColor = "bg-indigo-950/60 text-indigo-300 border-indigo-500/40 animate-pulse";
+        statusLabel = "\u{1F535} AUTO-PATCH GENERATED: AST DIFF READY FOR OPERATOR APPROVAL";
       }
       this.container.innerHTML = `
-      <div class="topographic-bg min-h-[calc(100vh-64px)] p-4 lg:p-8 space-y-8 max-w-7xl mx-auto">
+      <div class="space-y-8 max-w-7xl mx-auto px-4 font-mono">
         
-        <!-- Header & Status Banner -->
-        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-6 border-b border-[#1F2937]">
+        <!-- Header & Interactive Controls -->
+        <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 pb-6 border-b border-[#1F2937]">
           <div>
-            <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full border text-xs font-mono mb-2 ${statusBadgeColor}">
-              <span class="w-2 h-2 rounded-full ${isDegraded ? "bg-red-500 animate-ping" : "bg-emerald-400"}"></span>
+            <div class="inline-flex items-center space-x-2 px-3 py-1.5 border text-xs font-mono mb-3 ${statusBadgeColor}">
+              <span class="w-2 h-2 rounded-full ${isDegraded ? "bg-[#E3262E] animate-ping" : "bg-emerald-400"}"></span>
               <span>${statusLabel}</span>
             </div>
-            <h1 class="text-3xl font-extrabold text-white tracking-tight">Pipeline Health &amp; Self-Healing Console</h1>
-            <p class="text-xs text-[#94A3B8] mt-1">Autonomous web scraper DOM drift detection, schema recovery, and operator verification logs.</p>
+            <h2 class="font-serif text-2xl lg:text-3xl font-extrabold text-white uppercase tracking-tight">PIPELINE HEALTH &amp; RECOVERY CONSOLE</h2>
+            <p class="text-xs text-[#8A8A8A] mt-1 font-mono uppercase tracking-wider">Autonomous DOM Drift Detection \xB7 Schema Auto-Repair \xB7 Human Operator Approval Gating</p>
           </div>
 
-          <!-- Quick Action Buttons -->
-          <div class="flex flex-wrap items-center gap-2">
-            <button id="btn-drift" class="px-4 py-2.5 rounded-xl bg-red-500/20 hover:bg-red-500/30 text-red-300 border border-red-500/40 text-xs font-bold transition flex items-center space-x-1.5 ${!isHealthy ? "opacity-50 cursor-not-allowed" : ""}" ${!isHealthy ? "disabled" : ""}>
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-              <span>1. Simulate Selector Drift</span>
+          <!-- Quick Action Buttons matching Editorial Theme -->
+          <div class="flex flex-wrap items-center gap-3">
+            <button id="btn-drift" class="px-4 py-2.5 bg-red-950/40 hover:bg-red-900/60 text-[#E3262E] border border-[#E3262E]/60 text-xs font-bold font-mono uppercase transition flex items-center space-x-2 ${!isHealthy ? "opacity-40 cursor-not-allowed" : ""}" ${!isHealthy ? "disabled" : ""}>
+              <span>1. SIMULATE DRIFT</span>
             </button>
 
-            <button id="btn-heal" class="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition flex items-center space-x-1.5 shadow-md shadow-indigo-600/20 ${!isDegraded ? "opacity-50 cursor-not-allowed" : ""}" ${!isDegraded ? "disabled" : ""}>
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-              <span>2. Trigger AI Repair Agent</span>
+            <button id="btn-heal" class="px-4 py-2.5 bg-[#E3262E] hover:bg-[#C11B22] text-white text-xs font-bold font-mono uppercase transition flex items-center space-x-2 shadow-lg shadow-[#E3262E]/20 ${!isDegraded ? "opacity-40 cursor-not-allowed" : ""}" ${!isDegraded ? "disabled" : ""}>
+              <span>2. TRIGGER LLM REPAIR</span>
             </button>
 
-            <button id="btn-approve" class="px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-[#0A0E14] text-xs font-extrabold transition flex items-center space-x-1.5 shadow-md shadow-emerald-500/20 ${!isHealedUnapproved ? "opacity-50 cursor-not-allowed" : ""}" ${!isHealedUnapproved ? "disabled" : ""}>
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-              <span>3. Approve Auto-Patch</span>
+            <button id="btn-approve" class="px-4 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-black text-xs font-extrabold font-mono uppercase transition flex items-center space-x-2 shadow-lg shadow-emerald-500/20 ${!isHealedUnapproved ? "opacity-40 cursor-not-allowed" : ""}" ${!isHealedUnapproved ? "disabled" : ""}>
+              <span>3. APPROVE AUTO-PATCH</span>
             </button>
 
-            <button id="btn-reset" class="p-2.5 rounded-xl bg-[#141924] hover:bg-[#1E2536] text-[#94A3B8] border border-[#1F2937] text-xs transition" title="Reset Demo">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+            <button id="btn-reset" class="px-3 py-2.5 bg-[#0A0A0C] hover:bg-[#141924] text-[#8A8A8A] hover:text-white border border-[#1F2937] text-xs font-mono uppercase transition" title="Reset Demo">
+              <span>RESET</span>
             </button>
           </div>
         </div>
 
-        <!-- Metrics Grid -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div class="bg-[#141924] p-5 rounded-2xl border border-[#1F2937]">
-            <div class="text-xs text-[#94A3B8] font-mono">Active Scrapers</div>
+        <!-- Metric Cards -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="bg-[#0A0A0C] p-5 border border-[#1F2937]">
+            <div class="text-[11px] text-[#8A8A8A] font-mono uppercase tracking-wider">Collector Status</div>
             <div class="text-2xl font-bold font-mono text-white mt-1">
-              ${isDegraded ? "3/4" : "4/4"} <span class="text-xs text-emerald-400 font-normal">Active</span>
+              ${isDegraded ? "3/4 ONLINE" : "4/4 ONLINE"}
             </div>
+            <div class="text-[10px] text-[#E3262E] font-mono mt-1">${isDegraded ? "1 Collector Degraded" : "100% Collector Fill Rate"}</div>
           </div>
 
-          <div class="bg-[#141924] p-5 rounded-2xl border border-[#1F2937]">
-            <div class="text-xs text-[#94A3B8] font-mono">Pipeline Uptime</div>
+          <div class="bg-[#0A0A0C] p-5 border border-[#1F2937]">
+            <div class="text-[11px] text-[#8A8A8A] font-mono uppercase tracking-wider">Pipeline Uptime</div>
             <div class="text-2xl font-bold font-mono text-emerald-400 mt-1">99.8%</div>
+            <div class="text-[10px] text-[#8A8A8A] font-mono mt-1">Zero Data Loss Architecture</div>
           </div>
 
-          <div class="bg-[#141924] p-5 rounded-2xl border border-[#1F2937]">
-            <div class="text-xs text-[#94A3B8] font-mono">Auto-Healed Incidents</div>
-            <div class="text-2xl font-bold font-mono text-indigo-400 mt-1">${state.healedIncidentsCount}</div>
+          <div class="bg-[#0A0A0C] p-5 border border-[#1F2937]">
+            <div class="text-[11px] text-[#8A8A8A] font-mono uppercase tracking-wider">Auto-Healed Incidents</div>
+            <div class="text-2xl font-bold font-mono text-[#E3262E] mt-1">${state.healedIncidentsCount}</div>
+            <div class="text-[10px] text-[#8A8A8A] font-mono mt-1">Mean Repair: 1.4s</div>
           </div>
 
-          <div class="bg-[#141924] p-5 rounded-2xl border border-[#1F2937]">
-            <div class="text-xs text-[#94A3B8] font-mono">Mean Time to Repair (MTTR)</div>
-            <div class="text-2xl font-bold font-mono text-white mt-1">1.4s</div>
-          </div>
-        </div>
-
-        <!-- Collector Status Table -->
-        <div class="bg-[#141924] rounded-2xl border border-[#1F2937] overflow-hidden">
-          <div class="bg-[#0A0E14] px-6 py-3.5 border-b border-[#1F2937] flex items-center justify-between">
-            <span class="text-xs font-mono font-bold text-white uppercase tracking-wider">Collector Pipelines Status</span>
-            <span class="text-xs text-[#94A3B8]">Bright Data Web Scraper API Engine</span>
-          </div>
-
-          <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs">
-              <thead class="bg-[#0D121B] text-[#94A3B8] font-mono border-b border-[#1F2937]">
-                <tr>
-                  <th class="px-6 py-3">Collector ID</th>
-                  <th class="px-6 py-3">Target Public Portal</th>
-                  <th class="px-6 py-3">Error Rate</th>
-                  <th class="px-6 py-3">Last Sync</th>
-                  <th class="px-6 py-3 text-right">Status</th>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-[#1F2937] text-white">
-                ${state.collectors.map((c) => {
-        let badge = '<span class="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono">\u{1F7E2} Healthy</span>';
-        if (c.status === "DEGRADED") {
-          badge = '<span class="px-2.5 py-0.5 rounded-full bg-red-500/10 text-red-400 border border-red-500/20 font-mono animate-pulse">\u{1F534} Degraded (DOM Drift)</span>';
-        } else if (c.status === "REPAIRING") {
-          badge = '<span class="px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-mono animate-pulse">\u{1F7E1} AI Repairing</span>';
-        } else if (c.status === "PATCH_PENDING") {
-          badge = '<span class="px-2.5 py-0.5 rounded-full bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 font-mono">\u{1F535} Patch Pending</span>';
-        }
-        return `
-                    <tr class="hover:bg-[#1E2536]/50 transition">
-                      <td class="px-6 py-3.5 font-mono font-bold">${c.name}</td>
-                      <td class="px-6 py-3.5 text-[#94A3B8]">${c.target}</td>
-                      <td class="px-6 py-3.5 font-mono ${c.errorRate !== "0.00%" && c.errorRate !== "0.01%" && c.errorRate !== "0.02%" ? "text-red-400 font-bold" : "text-gray-300"}">${c.errorRate}</td>
-                      <td class="px-6 py-3.5 text-[#94A3B8]">${c.lastSync}</td>
-                      <td class="px-6 py-3.5 text-right">${badge}</td>
-                    </tr>
-                  `;
-      }).join("")}
-              </tbody>
-            </table>
+          <div class="bg-[#0A0A0C] p-5 border border-[#1F2937]">
+            <div class="text-[11px] text-[#8A8A8A] font-mono uppercase tracking-wider">Active Selector Schema</div>
+            <div class="text-xl font-bold font-mono text-white mt-1 truncate">${state.currentSelector}</div>
+            <div class="text-[10px] text-[#8A8A8A] font-mono mt-1">Bright Data Harvester v2.4</div>
           </div>
         </div>
 
-        <!-- Side-by-Side Payload Diff Inspector -->
-        <div id="diff-viewer-mount"></div>
+        <!-- Horizontal Pipeline Step Machine Visualizer -->
+        <div class="bg-[#0A0A0C] border border-[#1F2937] p-6 space-y-4">
+          <div class="text-xs font-mono text-[#8A8A8A] uppercase tracking-widest flex items-center justify-between border-b border-[#1F2937] pb-3">
+            <span>5-STEP RECOVERABLE SCRAPER LIFECYCLE</span>
+            <span>DOM DRIFT RECOVERY PROTOCOL</span>
+          </div>
 
-        <!-- Streaming Terminal Console (Section 2 & 3 Requirement) -->
-        <div class="bg-[#0A0E14] rounded-2xl border border-[#1F2937] overflow-hidden shadow-2xl">
-          <div class="bg-[#0F141C] px-5 py-3 border-b border-[#1F2937] flex items-center justify-between">
-            <div class="flex items-center space-x-2">
-              <div class="flex space-x-1.5">
-                <span class="w-3 h-3 rounded-full bg-red-500/80"></span>
-                <span class="w-3 h-3 rounded-full bg-amber-500/80"></span>
-                <span class="w-3 h-3 rounded-full bg-emerald-500/80"></span>
-              </div>
-              <span class="text-xs font-mono text-gray-300 font-bold ml-2">Collector Stream Log Console</span>
+          <div class="pipeline-track mx-auto">
+            <div class="pipeline-step ${isHealthy || isDegraded || isRepairing || isHealedUnapproved ? "active-step" : ""}">
+              <div class="step-label">01. DISCOVER</div>
+              <div class="step-status text-emerald-400">100% FILL RATE</div>
             </div>
-            <span class="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded">REALTIME LOG STREAM</span>
-          </div>
-
-          <div id="terminal-log-output" class="p-5 font-mono text-xs space-y-2 overflow-y-auto max-h-80 text-gray-300 leading-relaxed">
-            ${state.logHistory.map((l) => {
-        let color = "text-gray-300";
-        if (l.level === "ERROR") color = "text-red-400 font-bold bg-red-500/10 p-1 rounded";
-        if (l.level === "WARN") color = "text-amber-400 font-semibold";
-        if (l.level === "SUCCESS") color = "text-emerald-400 font-semibold";
-        return `
-                <div class="flex items-start space-x-3">
-                  <span class="text-[#94A3B8] text-[11px] select-none">${l.timestamp}</span>
-                  <span class="px-1.5 py-0.2 rounded text-[10px] bg-[#1F2937] text-indigo-300 select-none">${l.source}</span>
-                  <span class="${color}">${l.message}</span>
-                </div>
-              `;
-      }).join("")}
+            <div class="pipeline-step ${isHealthy || isDegraded || isRepairing || isHealedUnapproved ? "active-step" : ""}">
+              <div class="step-label">02. EXTRACT</div>
+              <div class="step-status text-emerald-400">RAW DATA STREAM</div>
+            </div>
+            <div class="pipeline-step ${isDegraded ? "glitch-step" : "active-step"}">
+              <div class="step-label">03. STRUCTURE</div>
+              <div class="step-status ${isDegraded ? "text-[#E3262E] font-bold" : "text-emerald-400"}">
+                ${isDegraded ? "DOM DRIFT DETECTED" : "SCHEMA VALIDATED"}
+              </div>
+            </div>
+            <div class="pipeline-step ${isRepairing || isHealedUnapproved ? "active-step" : ""}">
+              <div class="step-label">04. ANALYZE</div>
+              <div class="step-status ${isRepairing ? "text-amber-400 font-bold" : "text-[#8A8A8A]"}">
+                ${isRepairing ? "LLM HEALING..." : isHealedUnapproved ? "PATCH SYNTHESIZED" : "AST PARSER READY"}
+              </div>
+            </div>
+            <div class="pipeline-step ${isHealthy && state.healedIncidentsCount > 0 ? "active-step" : ""}">
+              <div class="step-label">05. RECOVER</div>
+              <div class="step-status text-emerald-400">1.4s AUTO-REPAIRED</div>
+            </div>
           </div>
         </div>
+
+        <!-- Payload & AST Diff Inspector Container -->
+        <div id="payload-diff-mount" class="bg-[#0A0A0C] border border-[#1F2937] p-6"></div>
 
       </div>
     `;
+      const diffMount = this.container.querySelector("#payload-diff-mount");
+      if (diffMount) {
+        this.diffViewer = new PayloadDiffViewer("payload-diff-mount");
+      }
       this.attachEvents();
-      if (!this.diffViewer) {
-        this.diffViewer = new PayloadDiffViewer("diff-viewer-mount", {
-          brokenPayload: state.brokenPayload,
-          healedPayload: state.healedPayload
-        });
-      } else {
-        this.diffViewer.update(state.brokenPayload, state.healedPayload);
-      }
-      this.unsubscribe = selfHealingEngine.subscribe((newState) => {
-        this.updateStateUI(newState);
-      });
+      this.subscribeToEngine();
     }
-    updateStateUI(state) {
-      const term = document.getElementById("terminal-log-output");
-      if (term) {
-        term.innerHTML = state.logHistory.map((l) => {
-          let color = "text-gray-300";
-          if (l.level === "ERROR") color = "text-red-400 font-bold bg-red-500/10 p-1 rounded";
-          if (l.level === "WARN") color = "text-amber-400 font-semibold";
-          if (l.level === "SUCCESS") color = "text-emerald-400 font-semibold";
-          return `
-          <div class="flex items-start space-x-3">
-            <span class="text-[#94A3B8] text-[11px] select-none">${l.timestamp}</span>
-            <span class="px-1.5 py-0.2 rounded text-[10px] bg-[#1F2937] text-indigo-300 select-none">${l.source}</span>
-            <span class="${color}">${l.message}</span>
-          </div>
-        `;
-        }).join("");
-        term.scrollTop = term.scrollHeight;
-      }
-      if (this.diffViewer) {
-        this.diffViewer.update(state.brokenPayload, state.healedPayload);
-      }
+    subscribeToEngine() {
+      if (this.unsubscribe) this.unsubscribe();
+      this.unsubscribe = selfHealingEngine.subscribe(() => {
+        this.render();
+      });
     }
     attachEvents() {
       const btnDrift = this.container.querySelector("#btn-drift");
       const btnHeal = this.container.querySelector("#btn-heal");
       const btnApprove = this.container.querySelector("#btn-approve");
       const btnReset = this.container.querySelector("#btn-reset");
-      if (btnDrift) btnDrift.addEventListener("click", () => {
-        selfHealingEngine.simulateDrift();
-        this.render();
-      });
-      if (btnHeal) btnHeal.addEventListener("click", () => {
-        selfHealingEngine.triggerSelfHealing();
-        this.render();
-      });
-      if (btnApprove) btnApprove.addEventListener("click", () => {
-        selfHealingEngine.approvePatch();
-        this.render();
-      });
-      if (btnReset) btnReset.addEventListener("click", () => {
-        selfHealingEngine.reset();
-        this.render();
-      });
+      if (btnDrift) btnDrift.addEventListener("click", () => selfHealingEngine.simulateDrift());
+      if (btnHeal) btnHeal.addEventListener("click", () => selfHealingEngine.triggerHeal());
+      if (btnApprove) btnApprove.addEventListener("click", () => selfHealingEngine.approvePatch());
+      if (btnReset) btnReset.addEventListener("click", () => selfHealingEngine.resetDemo());
     }
   };
 
@@ -1343,132 +1238,116 @@
     render() {
       if (!this.container) return;
       this.container.innerHTML = `
-      <div class="min-h-[calc(100vh-64px)] pb-16 overflow-hidden">
+      <div class="space-y-12 max-w-7xl mx-auto px-4 font-mono">
         
-        <!-- Hero Section -->
-        <section class="max-w-4xl mx-auto px-4 lg:px-8 pt-12 lg:pt-20 pb-12">
-          <div class="space-y-8 text-center animate-[fade-in-up_1s_ease-out_forwards] opacity-0" style="animation: fadeInUp 1s ease-out forwards;">
-            <div class="inline-flex items-center space-x-2 px-3 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-xs font-mono">
-              <span>Behind the Atlas</span>
-            </div>
-            
-            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.1]">
-              The Journey of <span class="bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 via-teal-300 to-indigo-400">Signal Atlas</span>
-            </h1>
-            
-            <p class="text-lg text-[#94A3B8] leading-relaxed max-w-2xl mx-auto">
-              We started with a simple question: "How can we detect emerging technological and civic hubs before they are formally announced?"
+        <!-- Section Subtitle & Main Title -->
+        <div class="text-center space-y-3">
+          <div class="inline-flex items-center space-x-2 px-3 py-1 bg-[#0A0A0C] border border-[#E3262E]/40 text-[#E3262E] text-xs font-mono uppercase tracking-widest">
+            <span class="w-2 h-2 rounded-full bg-[#E3262E] animate-pulse"></span>
+            <span>SCENE 04 / BACKEND ARCHITECTURE &amp; TEAM</span>
+          </div>
+
+          <h2 class="font-serif text-3xl lg:text-5xl font-extrabold text-white uppercase tracking-tight">
+            THE JOURNEY OF <span class="text-[#E3262E]">SIGNAL ATLAS.</span>
+          </h2>
+          <p class="text-xs lg:text-sm text-[#8A8A8A] max-w-2xl mx-auto font-mono uppercase tracking-wider">
+            "Emerging technology hubs announce themselves before anyone names them. Signal Atlas is the backend that finds it."
+          </p>
+        </div>
+
+        <!-- 3-Step Journey Timeline Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          
+          <!-- Step 1 -->
+          <div class="bg-[#0A0A0C] border border-[#1F2937] p-6 hover:border-[#E3262E]/60 transition-colors duration-300 relative group">
+            <div class="text-xs font-mono text-[#E3262E] tracking-widest mb-3">01 / THE CORE THESIS</div>
+            <h3 class="font-serif text-xl font-bold text-white mb-2 uppercase">MULTI-SOURCE CONVERGENCE</h3>
+            <p class="text-xs text-[#8A8A8A] leading-relaxed font-mono">
+              A university publishes a lab opening, an incubator announces a cohort, a company posts a facility expansion, a meetup appears \u2014 four unrelated organisations, four unrelated websites, the same city and domain within weeks.
             </p>
           </div>
-        </section>
 
-        <!-- Journey Section -->
-        <section class="max-w-4xl mx-auto px-4 lg:px-8 py-12 border-t border-[#1F2937]/80 relative">
-          <!-- Subtle background glow -->
-          <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-indigo-500/5 blur-[120px] rounded-full pointer-events-none"></div>
-
-          <div class="space-y-12 relative z-10">
-            
-            <!-- Step 1 -->
-            <div class="relative pl-8 border-l-2 border-emerald-500/30 hover:border-emerald-500 transition-colors duration-500 opacity-0" style="animation: fadeInUp 1s ease-out 0.3s forwards;">
-              <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-[#0A0E14] border-2 border-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]"></div>
-              <h3 class="text-xl font-bold text-white mb-2">The Idea</h3>
-              <p class="text-[#94A3B8] leading-relaxed">
-                Emerging technology hubs announce themselves before anyone names them. A university publishes a lab opening, an incubator announces a cohort, a company posts a facility expansion, a meetup appears \u2014 four unrelated organisations, four unrelated websites, the same city and the same technical domain, all within a few weeks. Nobody publishes that. It only exists as a pattern across sources. We wanted to build the backend that finds it.
-              </p>
-            </div>
-
-            <!-- Step 2 -->
-            <div class="relative pl-8 border-l-2 border-indigo-500/30 hover:border-indigo-500 transition-colors duration-500 opacity-0" style="animation: fadeInUp 1s ease-out 0.6s forwards;">
-              <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-[#0A0E14] border-2 border-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.5)]"></div>
-              <h3 class="text-xl font-bold text-white mb-2">The Architecture</h3>
-              <p class="text-[#94A3B8] leading-relaxed">
-                We designed an orchestrator that scrapes four categories of public early signal across cities like Delhi and San Francisco with Bright Data collectors. It normalizes them, merges duplicate reports, and scores each bin by time-decayed weighted evidence. Everything is mathematically decomposable so judges can verify the scoring rule.
-              </p>
-            </div>
-
-            <!-- Step 3 -->
-            <div class="relative pl-8 border-l-2 border-amber-500/30 hover:border-amber-500 transition-colors duration-500 opacity-0" style="animation: fadeInUp 1s ease-out 0.9s forwards;">
-              <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-[#0A0E14] border-2 border-amber-500 shadow-[0_0_10px_rgba(245,158,11,0.5)]"></div>
-              <h3 class="text-xl font-bold text-white mb-2">Self-Healing Data Pipelines</h3>
-              <p class="text-[#94A3B8] leading-relaxed">
-                The hardest part of web scraping is DOM drift. A layout change silently starves a scraper: it keeps returning 200, the rows keep arriving, the fields are empty. We built a self-healing pipeline that flags collectors as DEGRADED and uses an approval-gated repair path through an LLM to auto-patch CSS selectors.
-              </p>
-            </div>
-
+          <!-- Step 2 -->
+          <div class="bg-[#0A0A0C] border border-[#1F2937] p-6 hover:border-[#E3262E]/60 transition-colors duration-300 relative group">
+            <div class="text-xs font-mono text-[#E3262E] tracking-widest mb-3">02 / PURE DOMAIN ARCHITECTURE</div>
+            <div class="font-mono text-[10px] text-emerald-400 mb-1">app/domain/ ZERO I/O</div>
+            <h3 class="font-serif text-xl font-bold text-white mb-2 uppercase">DECOMPOSABLE SCORING</h3>
+            <p class="text-xs text-[#8A8A8A] leading-relaxed font-mono">
+              Scores decay exponentially ($S = sum w cdot e^{-0.1 cdot 	ext{days}}$). Source-concentration caps prevent single-source dominating. Every zone score decomposes into verified component contributions.
+            </p>
           </div>
-        </section>
+
+          <!-- Step 3 -->
+          <div class="bg-[#0A0A0C] border border-[#1F2937] p-6 hover:border-[#E3262E]/60 transition-colors duration-300 relative group">
+            <div class="text-xs font-mono text-[#E3262E] tracking-widest mb-3">03 / DOM DRIFT RECOVERY</div>
+            <div class="font-mono text-[10px] text-amber-400 mb-1">BRIGHT DATA + LLM HEALING</div>
+            <h3 class="font-serif text-xl font-bold text-white mb-2 uppercase">SELF-HEALING PIPELINES</h3>
+            <p class="text-xs text-[#8A8A8A] leading-relaxed font-mono">
+              When a source site changes markup, fill-rate drops flag collector DEGRADED. Gemini LLM agent synthesizes a clean CSS selector patch for human operator approval.
+            </p>
+          </div>
+
+        </div>
 
         <!-- Team Section -->
-        <section class="max-w-5xl mx-auto px-4 lg:px-8 py-16 border-t border-[#1F2937]/80 mt-8">
-          <div class="text-center mb-12 opacity-0" style="animation: fadeInUp 1s ease-out 1.2s forwards;">
-            <h2 class="text-3xl font-bold text-white tracking-tight">Meet the Architects</h2>
-            <p class="text-[#94A3B8] mt-2">The builders behind the intelligence engine.</p>
+        <div class="pt-8 border-t border-[#1F2937] space-y-8">
+          <div class="text-center">
+            <div class="font-mono text-xs text-[#E3262E] tracking-widest uppercase">THE ARCHITECTS</div>
+            <h3 class="font-serif text-2xl lg:text-3xl font-bold text-white uppercase mt-1">ENGINEERING TEAM</h3>
           </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 opacity-0" style="animation: fadeInUp 1s ease-out 1.5s forwards;">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             
             <!-- Team Member 1 -->
-            <div class="group relative rounded-2xl bg-[#0A0E14] border border-[#1F2937] overflow-hidden hover:border-emerald-500/50 transition duration-500 shadow-xl">
-              <div class="aspect-square bg-[#141924] flex items-center justify-center relative overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?auto=format&fit=crop&q=80&w=400&h=400" alt="Team Member" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition duration-700">
-                <div class="absolute inset-0 bg-gradient-to-t from-[#0A0E14] via-[#0A0E14]/40 to-transparent"></div>
+            <div class="bg-[#0A0A0C] border border-[#1F2937] overflow-hidden hover:border-[#E3262E] transition-colors duration-300">
+              <div class="aspect-square bg-[#050505] relative overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?auto=format&fit=crop&q=80&w=400&h=400" alt="Ganesh Nair" class="w-full h-full object-cover grayscale contrast-125 hover:grayscale-0 transition duration-500">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#0A0A0C] via-transparent to-transparent"></div>
               </div>
-              <div class="p-6 relative z-10 -mt-12">
-                <h3 class="text-xl font-bold text-white drop-shadow-md">Ganesh Nair</h3>
-                <div class="text-xs text-emerald-400 font-mono mb-3">YOUR ROLE / TITLE</div>
-                <p class="text-sm text-[#94A3B8]">
-                  [Add your bio here: What did you build? What drives you? E.g., "I engineered the spatial convergence algorithm and the dynamic UI orchestration..."]
+              <div class="p-5 border-t border-[#1F2937]">
+                <h4 class="font-serif text-lg font-bold text-white uppercase">GANESH NAIR</h4>
+                <div class="text-[11px] text-[#E3262E] font-mono uppercase mb-2">FRONTEND &amp; SPATIAL UI ARCHITECT</div>
+                <p class="text-xs text-[#8A8A8A] font-mono leading-relaxed">
+                  Engineered the spatial convergence UI, Leaflet vector maps, and real-time telemetry orchestrator.
                 </p>
               </div>
             </div>
 
             <!-- Team Member 2 -->
-            <div class="group relative rounded-2xl bg-[#0A0E14] border border-[#1F2937] overflow-hidden hover:border-indigo-500/50 transition duration-500 shadow-xl">
-              <div class="aspect-square bg-[#141924] flex items-center justify-center relative overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=400&h=400" alt="Team Member" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition duration-700">
-                <div class="absolute inset-0 bg-gradient-to-t from-[#0A0E14] via-[#0A0E14]/40 to-transparent"></div>
+            <div class="bg-[#0A0A0C] border border-[#1F2937] overflow-hidden hover:border-[#E3262E] transition-colors duration-300">
+              <div class="aspect-square bg-[#050505] relative overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=400&h=400" alt="Arjit Ujjawal" class="w-full h-full object-cover grayscale contrast-125 hover:grayscale-0 transition duration-500">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#0A0A0C] via-transparent to-transparent"></div>
               </div>
-              <div class="p-6 relative z-10 -mt-12">
-                <h3 class="text-xl font-bold text-white drop-shadow-md">Arjit Ujjawal</h3>
-                <div class="text-xs text-indigo-400 font-mono mb-3">THEIR ROLE / TITLE</div>
-                <p class="text-sm text-[#94A3B8]">
-                  [Add teammate bio here: E.g., "Architected the Python backend, the pure domain rules, and the LLM self-healing LLM integration..."]
+              <div class="p-5 border-t border-[#1F2937]">
+                <h4 class="font-serif text-lg font-bold text-white uppercase">ARJIT UJJAWAL</h4>
+                <div class="text-[11px] text-[#E3262E] font-mono uppercase mb-2">BACKEND &amp; DOMAIN ARCHITECT</div>
+                <p class="text-xs text-[#8A8A8A] font-mono leading-relaxed">
+                  Architected pure domain models, time-decay scoring math, and LLM self-healing pipeline integrations.
                 </p>
               </div>
             </div>
 
-            <!-- Team Member 3 -->
-            <div class="group relative rounded-2xl bg-[#0A0E14] border border-[#1F2937] overflow-hidden hover:border-amber-500/50 transition duration-500 shadow-xl sm:col-span-2 lg:col-span-1">
-              <div class="aspect-square bg-[#141924] flex items-center justify-center relative overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=400&h=400" alt="Team Member" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition duration-700">
-                <div class="absolute inset-0 bg-gradient-to-t from-[#0A0E14] via-[#0A0E14]/40 to-transparent"></div>
+            <!-- Team Member 3 (Optional) -->
+            <div class="bg-[#0A0A0C] border border-[#1F2937] overflow-hidden hover:border-[#E3262E] transition-colors duration-300 sm:col-span-2 lg:col-span-1">
+              <div class="aspect-square bg-[#050505] relative overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=400&h=400" alt="Teammate" class="w-full h-full object-cover grayscale contrast-125 hover:grayscale-0 transition duration-500">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#0A0A0C] via-transparent to-transparent"></div>
               </div>
-              <div class="p-6 relative z-10 -mt-12">
-                <h3 class="text-xl font-bold text-white drop-shadow-md">Third Member (Optional)</h3>
-                <div class="text-xs text-amber-400 font-mono mb-3">THEIR ROLE / TITLE</div>
-                <p class="text-sm text-[#94A3B8]">
-                  [Add teammate bio here: E.g., "Led the Bright Data collector deployments and spatial data normalizations..."]
+              <div class="p-5 border-t border-[#1F2937]">
+                <h4 class="font-serif text-lg font-bold text-white uppercase">TEAM MEMBER</h4>
+                <div class="text-[11px] text-[#E3262E] font-mono uppercase mb-2">COLLECTOR &amp; REGISTRY LEAD</div>
+                <p class="text-xs text-[#8A8A8A] font-mono leading-relaxed">
+                  Managed Bright Data Scraper Studio collector configurations and spatial dataset normalizations.
                 </p>
               </div>
             </div>
 
           </div>
-        </section>
+        </div>
 
       </div>
     `;
-      if (!document.getElementById("about-animations")) {
-        const style = document.createElement("style");
-        style.id = "about-animations";
-        style.innerHTML = `
-        @keyframes fadeInUp {
-          from { opacity: 0; transform: translateY(30px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-      `;
-        document.head.appendChild(style);
-      }
     }
     destroy() {
       this.container.innerHTML = "";
