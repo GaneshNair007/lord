@@ -1,11 +1,12 @@
-﻿/**
+/**
  * Signal Atlas — Main Application Orchestrator
  */
 
-import { TopBar } from './components/TopBar.js';
-import { LandingView } from './components/LandingView.js';
-import { MapDashboardView } from './components/MapDashboardView.js';
-import { PipelineHealthView } from './components/PipelineHealthView.js';
+import { TopBar } from './TopBar.js';
+import { LandingView } from './LandingView.js';
+import { MapDashboardView } from './MapDashboardView.js';
+import { PipelineHealthView } from './PipelineHealthView.js';
+import { AboutView } from './AboutView.js';
 
 class App {
   constructor() {
@@ -47,12 +48,12 @@ class App {
       console.error("App Initialization Error:", err);
       const mount = document.getElementById('main-mount');
       if (mount) {
-        mount.innerHTML = \
+        mount.innerHTML = `
           <div class="p-8 text-center text-red-400 bg-red-950/20 border border-red-500/30 m-6 rounded-2xl">
             <h2 class="text-lg font-bold">Signal Atlas UI Runtime Error</h2>
-            <p class="text-xs mt-2 font-mono">\</p>
+            <p class="text-xs mt-2 font-mono">${err.message}</p>
           </div>
-        \;
+        `;
       }
     }
   }
@@ -97,6 +98,8 @@ class App {
       });
     } else if (view === 'pipeline') {
       this.currentViewInstance = new PipelineHealthView('main-mount');
+    } else if (view === 'about') {
+      this.currentViewInstance = new AboutView('main-mount');
     }
 
     window.scrollTo({ top: 0, behavior: 'smooth' });

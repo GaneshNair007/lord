@@ -2,7 +2,7 @@
  * Signal Atlas — Pipeline Health & Self-Healing Monitor Component (Page 3)
  */
 
-import { selfHealingEngine } from '../services/selfHealingEngine.js';
+import { selfHealingEngine } from './selfHealingEngine.js';
 import { PayloadDiffViewer } from './PayloadDiffViewer.js';
 
 export class PipelineHealthView {
@@ -253,3 +253,4 @@ export class PipelineHealthView {
     });
   }
 }
+

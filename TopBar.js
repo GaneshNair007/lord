@@ -3,7 +3,7 @@
  * Renders header bar, navigation tabs, persistent live indicator, and active mode badge.
  */
 
-import { selfHealingEngine } from '../services/selfHealingEngine.js';
+import { selfHealingEngine } from './selfHealingEngine.js';
 
 export class TopBar {
   constructor(containerId, options = {}) {
@@ -35,13 +35,13 @@ export class TopBar {
     const isHealedUnapproved = this.pipelineState.status === 'HEALED_UNAPPROVED';
 
     let statusDotColor = 'bg-emerald-500';
-    let statusText = 'Live · 4 collectors · updated 2m ago';
+    let statusText = 'Live • 4 collectors • updated 2m ago';
     if (isDegraded) {
       statusDotColor = 'bg-red-500 animate-pulse';
-      statusText = '🔴 Scraper Drift Detected · 1 Action Required';
+      statusText = '⚠️ Scraper Drift Detected • 1 Action Required';
     } else if (isHealedUnapproved) {
       statusDotColor = 'bg-indigo-400 animate-pulse';
-      statusText = '🔵 Auto-Patch Ready · Approval Needed';
+      statusText = '✨ Auto-Patch Ready • Approval Needed';
     }
 
     this.container.innerHTML = `
@@ -81,6 +81,9 @@ export class TopBar {
               <span>Pipeline Health</span>
               ${isDegraded ? '<span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>' : ''}
             </button>
+            <button id="nav-about" class="px-4 py-1.5 rounded-lg text-xs md:text-sm font-medium transition flex items-center space-x-1.5 ${this.activeView === 'about' ? 'bg-[#1F2937] text-white shadow-sm' : 'text-[#94A3B8] hover:text-white'}">
+              <span>About Us</span>
+            </button>
           </nav>
 
           <!-- Right Action & Mode Badge -->
@@ -106,12 +109,14 @@ export class TopBar {
     const landingBtn = this.container.querySelector('#nav-landing');
     const mapBtn = this.container.querySelector('#nav-map');
     const pipelineBtn = this.container.querySelector('#nav-pipeline');
+    const aboutBtn = this.container.querySelector('#nav-about');
     const quickDemoBtn = this.container.querySelector('#quick-demo-btn');
 
     if (brand) brand.addEventListener('click', (e) => { e.preventDefault(); this.onViewChange('landing'); });
     if (landingBtn) landingBtn.addEventListener('click', () => this.onViewChange('landing'));
     if (mapBtn) mapBtn.addEventListener('click', () => this.onViewChange('map'));
     if (pipelineBtn) pipelineBtn.addEventListener('click', () => this.onViewChange('pipeline'));
+    if (aboutBtn) aboutBtn.addEventListener('click', () => this.onViewChange('about'));
     if (quickDemoBtn) quickDemoBtn.addEventListener('click', () => this.onViewChange('pipeline'));
   }
 }

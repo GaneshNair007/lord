@@ -44,7 +44,7 @@ export const OPPORTUNITIES_DATA = [
         { source_id: "perm_tx_8891", type: "Commercial Remodel", valuation: "$18,500,000" }
       ],
       emergence_index: 8.42,
-      score_breakdown: { velocity: 0.88, spatial_k-means: 0.95, source_entropy: 0.92 }
+      score_breakdown: { velocity: 0.88, 'spatial_k-means': 0.95, source_entropy: 0.92 }
     }
   },
   {
@@ -84,7 +84,7 @@ export const OPPORTUNITIES_DATA = [
         { source_id: "lease_sc_7712", square_footage: 350000 }
       ],
       emergence_index: 9.15,
-      score_breakdown: { velocity: 0.96, spatial_k-means: 0.92, source_entropy: 0.98 }
+      score_breakdown: { velocity: 0.96, 'spatial_k-means': 0.92, source_entropy: 0.98 }
     }
   },
   {
@@ -300,3 +300,4 @@ export function getCategories(mode = "opportunities") {
   }
   return ["all", "R&D Hiring", "Corporate Filings", "Patent Filings", "Real Estate & Zoning"];
 }
+

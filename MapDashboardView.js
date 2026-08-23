@@ -2,7 +2,7 @@
  * Signal Atlas — Map Dashboard View Component (Page 2)
  */
 
-import { getDataset, getCities, getCategories } from '../services/dataset.js';
+import { getDataset, getCities, getCategories } from './dataset.js';
 import { SignalDrawer } from './SignalDrawer.js';
 
 export class MapDashboardView {
@@ -349,3 +349,4 @@ export class MapDashboardView {
     }
   }
 }
+
