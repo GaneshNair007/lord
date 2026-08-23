@@ -1,9 +1,7 @@
 /**
- * Signal Atlas — Main Application Orchestrator (Full Scrollable Web App)
+ * Signal Atlas — Main Orchestrator (Fully Scrollable Web Application)
  */
 
-import { TopBar } from './TopBar.js';
-import { LandingView } from './LandingView.js';
 import { MapDashboardView } from './MapDashboardView.js';
 import { PipelineHealthView } from './PipelineHealthView.js';
 import { AboutView } from './AboutView.js';
@@ -11,9 +9,6 @@ import { AboutView } from './AboutView.js';
 class App {
   constructor() {
     this.activeMode = 'opportunities';
-    this.activeView = 'landing';
-    this.topBar = null;
-    this.landingView = null;
     this.mapView = null;
     this.pipelineView = null;
     this.aboutView = null;
@@ -27,38 +22,35 @@ class App {
         console.error("Signal Atlas Runtime Exception:", e);
       });
 
-      const mainMount = document.getElementById('main-mount');
-      if (mainMount) {
-        mainMount.innerHTML = `
-          <div id="section-landing" class="min-h-screen relative border-b border-[#1F2937]/50"></div>
-          <div id="section-map" class="min-h-screen relative border-b border-[#1F2937]/50 py-8"></div>
-          <div id="section-pipeline" class="min-h-screen relative border-b border-[#1F2937]/50 py-8"></div>
-          <div id="section-about" class="min-h-screen relative py-8"></div>
-        `;
-
-        // Instantiate all section views sequentially
-        this.landingView = new LandingView('section-landing', {
-          onNavigate: (targetView, targetMode) => this.scrollToSection(targetView, targetMode)
-        });
-
-        this.mapView = new MapDashboardView('section-map', {
+      // Mount Map Section
+      const mapMount = document.getElementById('map-section-mount');
+      if (mapMount) {
+        this.mapView = new MapDashboardView('map-section-mount', {
           activeMode: this.activeMode,
-          onNavigate: (targetView, targetMode) => this.scrollToSection(targetView, targetMode)
+          onNavigate: (targetView) => this.scrollToSection(targetView)
         });
-
-        this.pipelineView = new PipelineHealthView('section-pipeline');
-        this.aboutView = new AboutView('section-about');
       }
 
-      // Initialize persistent TopBar header
-      this.topBar = new TopBar('topbar-mount', {
-        activeView: 'landing',
-        activeMode: this.activeMode,
-        onViewChange: (view) => this.scrollToSection(view),
-        onModeChange: (mode) => this.setMode(mode)
-      });
+      // Mount Pipeline Section
+      const pipelineMount = document.getElementById('pipeline-section-mount');
+      if (pipelineMount) {
+        this.pipelineView = new PipelineHealthView('pipeline-section-mount');
+      }
 
-      // ScrollSpy to update TopBar active tab as user scrolls down the page
+      // Mount About Section
+      const aboutMount = document.getElementById('about-section-mount');
+      if (aboutMount) {
+        this.aboutView = new AboutView('about-section-mount');
+      }
+
+      // Hero Web Canvas Animation
+      this.initHeroCanvas();
+
+      // Custom Cursor
+      this.initCustomCursor();
+
+      // Navigation & ScrollSpy
+      this.initNavigation();
       this.initScrollSpy();
 
       // Keyboard accessibility
@@ -74,49 +66,144 @@ class App {
     }
   }
 
-  scrollToSection(view, mode = null) {
-    if (mode) {
-      this.setMode(mode);
-    }
-    const targetEl = document.getElementById(`section-${view}`);
-    if (targetEl) {
-      targetEl.scrollIntoView({ behavior: 'smooth' });
-    }
+  initHeroCanvas() {
+    const canvas = document.getElementById('hero-web-canvas');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let particles = [];
+
+    const resize = () => {
+      width = canvas.width = canvas.parentElement.clientWidth || window.innerWidth;
+      height = canvas.height = canvas.parentElement.clientHeight || window.innerHeight;
+      createParticles();
+    };
+
+    const createParticles = () => {
+      particles = [];
+      const numParticles = Math.floor((width * height) / 12000);
+      for (let i = 0; i < numParticles; i++) {
+        particles.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          vx: (Math.random() - 0.5) * 0.8,
+          vy: (Math.random() - 0.5) * 0.8,
+          radius: Math.random() * 2 + 1
+        });
+      }
+    };
+
+    window.addEventListener('resize', resize);
+    resize();
+
+    let mouse = { x: -1000, y: -1000 };
+    window.addEventListener('mousemove', (e) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    });
+
+    const animate = () => {
+      ctx.clearRect(0, 0, width, height);
+
+      // Draw particle nodes & connecting lines
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+
+        if (p.x < 0 || p.x > width) p.vx *= -1;
+        if (p.y < 0 || p.y > height) p.vy *= -1;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(227, 38, 46, 0.6)';
+        ctx.fill();
+
+        for (let j = i + 1; j < particles.length; j++) {
+          const p2 = particles[j];
+          const dx = p.x - p2.x;
+          const dy = p.y - p2.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < 120) {
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.strokeStyle = `rgba(227, 38, 46, ${0.35 * (1 - dist / 120)})`;
+            ctx.lineWidth = 0.8;
+            ctx.stroke();
+          }
+        }
+      }
+
+      requestAnimationFrame(animate);
+    };
+
+    animate();
   }
 
-  setMode(mode) {
-    this.activeMode = mode;
-    if (this.topBar) {
-      this.topBar.update(this.activeView, this.activeMode);
-    }
-    if (this.mapView && typeof this.mapView.setMode === 'function') {
-      this.mapView.setMode(mode);
+  initCustomCursor() {
+    const cursor = document.getElementById('custom-cursor');
+    if (!cursor) return;
+
+    window.addEventListener('mousemove', (e) => {
+      cursor.style.left = `${e.clientX}px`;
+      cursor.style.top = `${e.clientY}px`;
+    });
+  }
+
+  initNavigation() {
+    const targets = document.querySelectorAll('[data-target]');
+    targets.forEach(el => {
+      el.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetId = el.getAttribute('data-target');
+        this.scrollToSection(targetId);
+      });
+    });
+  }
+
+  scrollToSection(sectionId) {
+    const el = document.getElementById(sectionId);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
     }
   }
 
   initScrollSpy() {
-    const sections = [
-      { id: 'section-landing', name: 'landing' },
-      { id: 'section-[#section-landing]', name: 'landing' },
-      { id: 'section-map', name: 'map' },
-      { id: 'section-pipeline', name: 'pipeline' },
-      { id: 'section-about', name: 'about' }
-    ];
+    const sections = ['scene-01', 'scene-02', 'scene-03', 'scene-04'];
+    const navItems = document.querySelectorAll('.nav-link-item');
+    const dots = document.querySelectorAll('.indicator-dot');
+
+    const updateActiveState = (activeId) => {
+      navItems.forEach(item => {
+        if (item.getAttribute('data-target') === activeId) {
+          item.classList.add('active');
+        } else {
+          item.classList.remove('active');
+        }
+      });
+
+      dots.forEach(dot => {
+        if (dot.getAttribute('data-target') === activeId) {
+          dot.classList.add('active');
+        } else {
+          dot.classList.remove('active');
+        }
+      });
+    };
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          const matched = sections.find(s => s.id === entry.target.id);
-          if (matched && this.topBar) {
-            this.activeView = matched.name;
-            this.topBar.update(matched.name, this.activeMode);
-          }
+          updateActiveState(entry.target.id);
         }
       });
-    }, { threshold: 0.2 });
+    }, { threshold: 0.3 });
 
-    sections.forEach(s => {
-      const el = document.getElementById(s.id);
+    sections.forEach(id => {
+      const el = document.getElementById(id);
       if (el) observer.observe(el);
     });
   }

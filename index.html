@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SIGNAL ATLAS — Spatio-Temporal Intelligence Engine</title>
+  <title>PROJECT / ATLAS — Autonomous Intelligence Engine</title>
 
-  <!-- Google Fonts -->
+  <!-- Google Fonts: Bodoni Moda (variable), Inter & Space Grotesk -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -13,31 +13,139 @@
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Leaflet CSS & JS for Map rendering -->
+  <!-- Leaflet CSS & JS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 
-  <!-- D3.js & TopoJSON -->
+  <!-- D3.js v7 and TopoJSON v3 -->
   <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
   <script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
 
   <link rel="stylesheet" href="styles.css">
 </head>
-<body class="bg-[#0A0E14] text-[#F5F5F5] min-h-screen overflow-x-hidden">
+<body class="bg-[#050505] text-[#F5F5F5] min-h-screen overflow-x-hidden">
 
   <!-- Custom Lerping Cursor Follower -->
   <div id="custom-cursor"></div>
 
-  <!-- Persistent Top Navigation Bar -->
-  <div id="topbar-mount"></div>
+  <!-- Quiet Top Navigation Header -->
+  <header class="spider-header">
+    <a href="#scene-01" class="brand-title">PROJECT / ATLAS</a>
 
-  <!-- Main Scrollable Content Container -->
-  <main id="main-mount" class="w-full min-h-screen"></main>
+    <nav class="nav-links" id="main-nav">
+      <span class="nav-link-item active" data-target="scene-01">01. OVERVIEW</span>
+      <span class="nav-link-item" data-target="scene-02">02. CONVERGENCE MAP</span>
+      <span class="nav-link-item" data-target="scene-03">03. PIPELINE HEALTH</span>
+      <span class="nav-link-item" data-target="scene-04">04. ABOUT US</span>
+    </nav>
 
-  <!-- Drawer Container for Signal Detail Breakdown -->
+    <div class="status-badge">
+      <span class="pulse-red-dot"></span> SYSTEM ONLINE
+    </div>
+  </header>
+
+  <!-- Fixed Right-Side Vertical Scene Indicator (4 Dots) -->
+  <div class="scene-indicator-bar" id="scene-indicator">
+    <div class="indicator-dot active" data-target="scene-01" title="Scene 01: Overview"></div>
+    <div class="indicator-dot" data-target="scene-02" title="Scene 02: Convergence Map"></div>
+    <div class="indicator-dot" data-target="scene-03" title="Scene 03: Pipeline Health"></div>
+    <div class="indicator-dot" data-target="scene-04" title="Scene 04: About Us & Journey"></div>
+  </div>
+
+  <!-- Main Container -->
+  <main class="scene-container" id="main-scroll-container">
+
+    <!-- ==========================================
+         SCENE 01: 01. OVERVIEW (Clean Full-Screen Evolving Web Canvas)
+         ========================================== -->
+    <section class="scene-section" id="scene-01">
+      
+      <!-- Evolving Web Network Canvas -->
+      <div class="absolute inset-0 z-0 w-full h-full">
+        <canvas id="hero-web-canvas"></canvas>
+      </div>
+
+      <!-- Integrated Typography Overlay -->
+      <div class="relative z-10 max-w-5xl mx-auto w-full px-8 flex flex-col items-center justify-center space-y-6 text-center">
+        <div class="font-mono text-xs text-[#E3262E] tracking-[0.25em] uppercase">SCENE 01 / RECONNAISSANCE PROTOCOL</div>
+        <h1 class="hero-integrated-title text-white">
+          AUTONOMOUS<br><span class="text-white/85">INTELLIGENCE.</span>
+        </h1>
+        <p class="text-sm md:text-base text-[#8A8A8A] max-w-2xl font-mono leading-relaxed pt-4">
+          Ingesting unstructured public web records — job postings, patent filings, municipal agendas — synthesizing spatio-temporal convergence clusters with self-healing scraper pipelines.
+        </p>
+      </div>
+
+      <!-- Minimal Scroll Instruction -->
+      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 font-mono text-xs text-[#8A8A8A] tracking-[0.2em] uppercase animate-bounce cursor-pointer" onclick="document.getElementById('scene-02').scrollIntoView({behavior:'smooth'})">
+        SCROLL TO ENTER ↓
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SCENE 02: 02. CONVERGENCE MAP
+         ========================================== -->
+    <section class="scene-section" id="scene-02">
+      <div class="max-w-7xl mx-auto w-full px-4 lg:px-8 py-8">
+        <div class="flex flex-col md:flex-row items-start md:items-end justify-between gap-4 pb-4 border-b border-[#1F2937] mb-6">
+          <div>
+            <div class="font-mono text-xs text-[#E3262E] tracking-widest uppercase">SCENE 02 / REAL GEOGRAPHIC CONVERGENCE MAP</div>
+            <h2 class="font-serif font-extrabold text-2xl lg:text-4xl text-white uppercase">Nº 02 | CONVERGENCE MAP</h2>
+            <div class="font-mono text-xs text-[#8A8A8A] tracking-wider uppercase mt-1">Global Signal Flow and Pattern Verification</div>
+          </div>
+        </div>
+
+        <!-- Map Dashboard Mount Container -->
+        <div id="map-section-mount"></div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SCENE 03: 03. PIPELINE HEALTH
+         ========================================== -->
+    <section class="scene-section bg-[#050505]" id="scene-03">
+      <div class="max-w-7xl mx-auto w-full px-4 lg:px-8 py-8">
+        <div class="text-center mb-8 space-y-2">
+          <div class="font-mono text-xs text-[#E3262E] tracking-widest uppercase">SCENE 03 / DOM DRIFT RECOVERY</div>
+          <h2 class="section-hero-title text-[#F5F5F5]">PIPELINE HEALTH.</h2>
+          <p class="font-mono text-xs text-[#8A8A8A]">Autonomous scraper health monitoring and LLM selector auto-healing</p>
+        </div>
+
+        <!-- Pipeline Mount Container -->
+        <div id="pipeline-section-mount"></div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SCENE 04: 04. ABOUT US & JOURNEY & TEAM
+         ========================================== -->
+    <section class="scene-section bg-[#070709]" id="scene-04">
+      <div class="max-w-7xl mx-auto w-full px-4 lg:px-8 py-8">
+        <div class="text-center mb-8 space-y-2">
+          <div class="font-mono text-xs text-[#E3262E] tracking-widest uppercase">SCENE 04 / ARCHITECTURE & JOURNEY</div>
+          <h2 class="section-hero-title text-[#F5F5F5]">ABOUT SIGNAL ATLAS.</h2>
+        </div>
+
+        <!-- About Mount Container -->
+        <div id="about-section-mount"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer w-full">
+    <div class="footer-giant-title">PROJECT ATLAS</div>
+    <div class="flex flex-col md:flex-row justify-between items-center max-w-5xl mx-auto font-mono text-[10px] text-[#8A8A8A] pt-4 border-t border-[#1F2937] px-8 gap-2">
+      <span>© 2026 AUTONOMOUS WEB INTELLIGENCE</span>
+      <span>SIGNAL ATLAS BACKEND &amp; SPATIAL FRONTEND</span>
+      <span>ALL RIGHTS RESERVED</span>
+    </div>
+  </footer>
+
+  <!-- Drawer Container for Signal Details -->
   <div id="drawer-container"></div>
 
-  <!-- Unified JS Bundle -->
+  <!-- JS Bundle -->
   <script src="bundle.js"></script>
 </body>
 </html>

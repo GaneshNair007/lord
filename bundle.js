@@ -1,477 +1,4 @@
 (() => {
-  // selfHealingEngine.js
-  var SelfHealingEngine = class {
-    constructor() {
-      this.status = "HEALTHY";
-      this.activeCollectorsCount = 4;
-      this.uptime = 99.8;
-      this.healedIncidentsCount = 12;
-      this.meanTimeToRepairSeconds = 1.4;
-      this.collectors = [
-        { id: "c1", name: "Bright Data Job Harvester (v2.4)", target: "Public Career Portals", status: "HEALTHY", errorRate: "0.02%", lastSync: "2m ago" },
-        { id: "c2", name: "USPTO Patent Assignment Stream", target: "Federal IP Registry", status: "HEALTHY", errorRate: "0.00%", lastSync: "5m ago" },
-        { id: "c3", name: "Commercial Zoning Harvester", target: "Municipal Permit Portals", status: "HEALTHY", errorRate: "0.01%", lastSync: "1m ago" },
-        { id: "c4", name: "Municipal Council Agenda Harvester", target: "City Clerk PDF Records", status: "HEALTHY", errorRate: "0.00%", lastSync: "12m ago" }
-      ];
-      this.listeners = [];
-      this.logHistory = [
-        { timestamp: this.getTimestamp(), level: "INFO", source: "SYSTEM", message: "Collector pipeline orchestrator online. 4/4 workers active." },
-        { timestamp: this.getTimestamp(), level: "INFO", source: "BRIGHTDATA", message: "Successfully ingested 152 public job listings across target metro areas." },
-        { timestamp: this.getTimestamp(), level: "INFO", source: "CONVERGENCE", message: "Emergence Index recalculation complete. 4 cluster candidates updated." }
-      ];
-      this.brokenPayload = null;
-      this.healedPayload = null;
-    }
-    subscribe(listener) {
-      this.listeners.push(listener);
-      listener(this.getSnapshot());
-      return () => {
-        this.listeners = this.listeners.filter((l) => l !== listener);
-      };
-    }
-    notify() {
-      const snapshot = this.getSnapshot();
-      this.listeners.forEach((l) => l(snapshot));
-    }
-    getSnapshot() {
-      return {
-        status: this.status,
-        activeCollectorsCount: this.activeCollectorsCount,
-        totalCollectorsCount: 4,
-        uptime: this.uptime,
-        healedIncidentsCount: this.healedIncidentsCount,
-        meanTimeToRepairSeconds: this.meanTimeToRepairSeconds,
-        collectors: [...this.collectors],
-        logHistory: [...this.logHistory],
-        brokenPayload: this.brokenPayload,
-        healedPayload: this.healedPayload
-      };
-    }
-    getTimestamp() {
-      const now = /* @__PURE__ */ new Date();
-      return now.toTimeString().split(" ")[0] + "." + String(now.getMilliseconds()).padStart(3, "0");
-    }
-    addLog(level, source, message) {
-      const entry = {
-        timestamp: this.getTimestamp(),
-        level,
-        source,
-        message
-      };
-      this.logHistory.push(entry);
-      if (this.logHistory.length > 80) this.logHistory.shift();
-      this.notify();
-    }
-    /**
-     * Step 1: Simulate Selector Drift / Schema Break
-     * Per Section 2 fix: Holds degraded 🔴 state sitting for 2-3 seconds before repair.
-     */
-    simulateDrift() {
-      if (this.status !== "HEALTHY") return;
-      this.status = "DEGRADED";
-      this.collectors[0].status = "DEGRADED";
-      this.collectors[0].errorRate = "94.2%";
-      this.brokenPayload = {
-        timestamp: (/* @__PURE__ */ new Date()).toISOString(),
-        collector_id: "brightdata_job_harvester_v2",
-        target_url: "https://public-listing-portal.example/jobs/tech-rnd-austin",
-        extracted_fields: {
-          company_name: "Undisclosed Stealth R&D",
-          job_title: "Lead Quantum Hardware Architect",
-          location_raw: null,
-          // ❌ BROKEN SELECTOR NULL
-          posted_date: "2026-08-22",
-          salary_range: "$220,000 - $280,000",
-          department_code: void 0
-          // ❌ MISSING KEY
-        },
-        scraper_error: "DOMSelectorNotFoundError: Selector 'div.legacy-job-card-2024 > span.loc-v1' returned 0 DOM elements.",
-        http_status: 200,
-        validation_status: "FAILED_SCHEMA_CHECK"
-      };
-      this.healedPayload = null;
-      this.addLog("ERROR", "SCRAPER_ENGINE", "CRITICAL: 'brightdata_job_harvester_v2' DOM extraction failed!");
-      this.addLog("WARN", "DOM_INSPECTOR", "Target DOM mutation detected on host public-listing-portal.example");
-      this.addLog("ERROR", "SCHEMA_VALIDATOR", "Validation failed: 'location_raw' is null. Emergence scoring suspended for Austin R&D cluster.");
-      this.notify();
-    }
-    /**
-     * Step 2: Trigger Self-Healing AI Repair Agent
-     */
-    triggerSelfHealing() {
-      if (this.status !== "DEGRADED") return;
-      this.status = "REPAIRING";
-      this.collectors[0].status = "REPAIRING";
-      this.addLog("INFO", "SELF_HEAL_AGENT", "Initiating autonomous DOM repair workflow...");
-      this.notify();
-      setTimeout(() => {
-        this.addLog("DEBUG", "DOM_ANALYZER", "Fetching HTML DOM AST snapshot from latest Bright Data raw stream...");
-      }, 400);
-      setTimeout(() => {
-        this.addLog("INFO", "LLM_INFERENCE", "Prompting Gemini AI agent with broken selector & updated DOM tree...");
-      }, 900);
-      setTimeout(() => {
-        this.addLog("INFO", "SELECTOR_RESOLVER", `AI Agent identified match: modern fallback '[data-testid="job-location-meta"]' (99.4% confidence)`);
-        this.healedPayload = {
-          timestamp: (/* @__PURE__ */ new Date()).toISOString(),
-          collector_id: "brightdata_job_harvester_v2",
-          target_url: "https://public-listing-portal.example/jobs/tech-rnd-austin",
-          extracted_fields: {
-            company_name: "Undisclosed Stealth R&D",
-            job_title: "Lead Quantum Hardware Architect",
-            location_raw: "Austin, TX (78701)",
-            // ✅ REPAIRED & NORMALIZED
-            posted_date: "2026-08-22",
-            salary_range: "$220,000 - $280,000",
-            department_code: "QUANTUM_RD_01"
-            // ✅ INFERRED & POPULATED
-          },
-          healed_by_agent: "Gemini-3.6-DOM-Repair-V2",
-          patch_applied: {
-            deprecated_selector: "div.legacy-job-card-2024 > span.loc-v1",
-            active_selector: '[data-testid="job-location-meta"]',
-            fallback_strategy: "semantic_attribute_match"
-          },
-          http_status: 200,
-          validation_status: "PASSED_AUTO_HEALED"
-        };
-        this.status = "HEALED_UNAPPROVED";
-        this.collectors[0].status = "PATCH_PENDING";
-        this.addLog("SUCCESS", "AUTO_PATCH", "Generated synthetic DOM patch #PAT-2026-0881. Awaiting operator verification.");
-        this.notify();
-      }, 1600);
-    }
-    /**
-     * Step 3: Operator Approves Patch
-     */
-    approvePatch() {
-      if (this.status !== "HEALED_UNAPPROVED") return;
-      this.status = "HEALTHY";
-      this.collectors[0].status = "HEALTHY";
-      this.collectors[0].errorRate = "0.01%";
-      this.healedIncidentsCount += 1;
-      this.addLog("SUCCESS", "ORCHESTRATOR", "Auto-patch #PAT-2026-0881 approved & deployed to Bright Data live scraper pool.");
-      this.addLog("INFO", "CONVERGENCE", "Pipeline re-synced. Emergence score for Austin Quantum Campus restored to 8.42.");
-      this.notify();
-    }
-    reset() {
-      this.status = "HEALTHY";
-      this.collectors[0].status = "HEALTHY";
-      this.collectors[0].errorRate = "0.02%";
-      this.brokenPayload = null;
-      this.healedPayload = null;
-      this.addLog("INFO", "SYSTEM", "Reset self-healing demonstration environment.");
-      this.notify();
-    }
-  };
-  var selfHealingEngine = new SelfHealingEngine();
-
-  // TopBar.js
-  var TopBar = class {
-    constructor(containerId, options = {}) {
-      this.container = document.getElementById(containerId);
-      this.activeView = options.activeView || "landing";
-      this.activeMode = options.activeMode || "opportunities";
-      this.onViewChange = options.onViewChange || (() => {
-      });
-      this.onModeChange = options.onModeChange || (() => {
-      });
-      this.pipelineState = selfHealingEngine.getSnapshot();
-      selfHealingEngine.subscribe((state) => {
-        this.pipelineState = state;
-        this.render();
-      });
-      this.render();
-    }
-    update(activeView, activeMode) {
-      this.activeView = activeView;
-      this.activeMode = activeMode;
-      this.render();
-    }
-    render() {
-      if (!this.container) return;
-      const isDegraded = this.pipelineState.status === "DEGRADED" || this.pipelineState.status === "REPAIRING";
-      const isHealedUnapproved = this.pipelineState.status === "HEALED_UNAPPROVED";
-      let statusDotColor = "bg-emerald-500";
-      let statusText = "Live \u2022 4 collectors \u2022 updated 2m ago";
-      if (isDegraded) {
-        statusDotColor = "bg-red-500 animate-pulse";
-        statusText = "\u26A0\uFE0F Scraper Drift Detected \u2022 1 Action Required";
-      } else if (isHealedUnapproved) {
-        statusDotColor = "bg-indigo-400 animate-pulse";
-        statusText = "\u2728 Auto-Patch Ready \u2022 Approval Needed";
-      }
-      this.container.innerHTML = `
-      <header class="sticky top-0 z-40 bg-[#0A0E14]/90 backdrop-blur-md border-b border-[#1F2937] px-4 lg:px-8 py-3">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3">
-          
-          <!-- Logo & Brand -->
-          <div class="flex items-center space-x-3 w-full md:w-auto justify-between md:justify-start">
-            <a href="#" id="brand-link" class="flex items-center space-x-2.5 text-white font-bold text-xl tracking-tight hover:opacity-90 transition">
-              <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 via-indigo-500 to-amber-500 p-0.5 flex items-center justify-center shadow-lg shadow-emerald-500/10">
-                <div class="w-full h-full bg-[#0A0E14] rounded-[7px] flex items-center justify-center">
-                  <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                </div>
-              </div>
-              <span class="bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-gray-400">SIGNAL ATLAS</span>
-            </a>
-
-            <!-- Persistent Live Status Indicator -->
-            <div class="flex items-center space-x-2 px-3 py-1 rounded-full bg-[#141924] border border-[#1F2937] text-xs text-[#94A3B8]">
-              <span class="w-2 h-2 rounded-full ${statusDotColor}"></span>
-              <span class="font-medium">${statusText}</span>
-            </div>
-          </div>
-
-          <!-- Center Navigation Tabs -->
-          <nav class="flex items-center space-x-1 bg-[#141924]/80 p-1 rounded-xl border border-[#1F2937]" aria-label="Main Navigation">
-            <button id="nav-landing" class="px-4 py-1.5 rounded-lg text-xs md:text-sm font-medium transition ${this.activeView === "landing" ? "bg-[#1F2937] text-white shadow-sm" : "text-[#94A3B8] hover:text-white"}">
-              Overview
-            </button>
-            <button id="nav-map" class="px-4 py-1.5 rounded-lg text-xs md:text-sm font-medium transition flex items-center space-x-1.5 ${this.activeView === "map" ? "bg-[#1F2937] text-white shadow-sm" : "text-[#94A3B8] hover:text-white"}">
-              <span>Convergence Map</span>
-              <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-mono">Live</span>
-            </button>
-            <button id="nav-pipeline" class="px-4 py-1.5 rounded-lg text-xs md:text-sm font-medium transition flex items-center space-x-1.5 ${this.activeView === "pipeline" ? "bg-[#1F2937] text-white shadow-sm" : "text-[#94A3B8] hover:text-white"}">
-              <span>Pipeline Health</span>
-              ${isDegraded ? '<span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>' : ""}
-            </button>
-            <button id="nav-about" class="px-4 py-1.5 rounded-lg text-xs md:text-sm font-medium transition flex items-center space-x-1.5 ${this.activeView === "about" ? "bg-[#1F2937] text-white shadow-sm" : "text-[#94A3B8] hover:text-white"}">
-              <span>About Us</span>
-            </button>
-          </nav>
-
-          <!-- Right Action & Mode Badge -->
-          <div class="hidden lg:flex items-center space-x-3 text-xs">
-            <div class="px-2.5 py-1 rounded-md bg-[#141924] border border-[#1F2937] text-[#94A3B8]">
-              Domain: <span class="font-mono text-[#F3F4F6] capitalize">${this.activeMode} Mode</span>
-            </div>
-            <button id="quick-demo-btn" class="px-3 py-1.5 rounded-lg bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 border border-indigo-500/30 font-medium transition flex items-center space-x-1">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-              <span>Self-Healing Demo</span>
-            </button>
-          </div>
-
-        </div>
-      </header>
-    `;
-      this.attachEvents();
-    }
-    attachEvents() {
-      const brand = this.container.querySelector("#brand-link");
-      const landingBtn = this.container.querySelector("#nav-landing");
-      const mapBtn = this.container.querySelector("#nav-map");
-      const pipelineBtn = this.container.querySelector("#nav-pipeline");
-      const aboutBtn = this.container.querySelector("#nav-about");
-      const quickDemoBtn = this.container.querySelector("#quick-demo-btn");
-      if (brand) brand.addEventListener("click", (e) => {
-        e.preventDefault();
-        this.onViewChange("landing");
-      });
-      if (landingBtn) landingBtn.addEventListener("click", () => this.onViewChange("landing"));
-      if (mapBtn) mapBtn.addEventListener("click", () => this.onViewChange("map"));
-      if (pipelineBtn) pipelineBtn.addEventListener("click", () => this.onViewChange("pipeline"));
-      if (aboutBtn) aboutBtn.addEventListener("click", () => this.onViewChange("about"));
-      if (quickDemoBtn) quickDemoBtn.addEventListener("click", () => this.onViewChange("pipeline"));
-    }
-  };
-
-  // LandingView.js
-  var LandingView = class {
-    constructor(containerId, options = {}) {
-      this.container = document.getElementById(containerId);
-      this.onNavigate = options.onNavigate || (() => {
-      });
-      this.render();
-    }
-    render() {
-      if (!this.container) return;
-      this.container.innerHTML = `
-      <div class="topographic-bg min-h-[calc(100vh-64px)] pb-16">
-        
-        <!-- Hero Section -->
-        <section class="max-w-7xl mx-auto px-4 lg:px-8 pt-12 lg:pt-20 pb-12">
-          <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            
-            <!-- Hero Text Content -->
-            <div class="lg:col-span-7 space-y-6">
-              <div class="inline-flex items-center space-x-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono">
-                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span>Spatial Intelligence & Scraper Observability Engine</span>
-              </div>
-              
-              <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.1]">
-                Detect early spatial signals <span class="bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 via-teal-300 to-indigo-400">before they emerge</span>
-              </h1>
-              
-              <p class="text-lg text-[#94A3B8] leading-relaxed max-w-2xl">
-                Signal Atlas ingests unstructured public web records \u2014 job postings, patent filings, municipal agendas, commercial permits \u2014 synthesizing spatio-temporal convergence clusters with self-healing scraper pipelines.
-              </p>
-
-              <!-- Action CTAs -->
-              <div class="flex flex-wrap gap-4 pt-2">
-                <button id="hero-cta-map" class="px-6 py-3.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-[#0A0E14] font-semibold transition shadow-lg shadow-emerald-500/20 flex items-center space-x-2">
-                  <span>Explore Convergence Map</span>
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-                </button>
-
-                <button id="hero-cta-pipeline" class="px-6 py-3.5 rounded-xl bg-[#141924] hover:bg-[#1E2536] text-white border border-[#1F2937] font-medium transition flex items-center space-x-2">
-                  <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-                  <span>Inspect Self-Healing Pipeline</span>
-                </button>
-              </div>
-
-              <!-- Quick Metrics Row -->
-              <div class="pt-6 border-t border-[#1F2937]/80 grid grid-cols-3 gap-4 text-left">
-                <div>
-                  <div class="text-2xl font-bold font-mono text-white">4 Sources</div>
-                  <div class="text-xs text-[#94A3B8]">Ingested & Cross-Linked</div>
-                </div>
-                <div>
-                  <div class="text-2xl font-bold font-mono text-emerald-400">&lt; 1.4s</div>
-                  <div class="text-xs text-[#94A3B8]">Mean Self-Healing Time</div>
-                </div>
-                <div>
-                  <div class="text-2xl font-bold font-mono text-indigo-400">99.8%</div>
-                  <div class="text-xs text-[#94A3B8]">Pipeline Uptime</div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Hero Interactive Teaser Card -->
-            <div class="lg:col-span-5">
-              <div class="relative rounded-2xl bg-[#141924] border border-[#1F2937] p-6 shadow-2xl overflow-hidden group">
-                
-                <!-- Teaser Label Header -->
-                <div class="flex items-center justify-between pb-4 mb-4 border-b border-[#1F2937]">
-                  <div class="flex items-center space-x-2">
-                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span class="text-xs font-mono text-white font-medium uppercase tracking-wider">Cluster Preview</span>
-                  </div>
-                  <span class="text-[11px] px-2.5 py-0.5 rounded-full bg-[#1F2937] text-[#94A3B8] font-mono">
-                    Live preview \xB7 sample data
-                  </span>
-                </div>
-
-                <!-- Teaser Interactive Pulse Visual -->
-                <div class="relative h-48 bg-[#0A0E14] rounded-xl border border-[#1F2937] p-4 flex items-center justify-around overflow-hidden">
-                  
-                  <!-- Topo subtle lines -->
-                  <div class="absolute inset-0 opacity-20 bg-[radial-gradient(#818cf8_1px,transparent_1px)] [background-size:16px_16px]"></div>
-
-                  <!-- Opportunity Pulse Marker -->
-                  <div class="relative z-10 text-center cursor-pointer transform hover:scale-105 transition" id="teaser-opp-pin">
-                    <div class="w-12 h-12 mx-auto rounded-full bg-emerald-500/20 border-2 border-emerald-500 flex items-center justify-center marker-pulse-opp shadow-lg shadow-emerald-500/20">
-                      <span class="text-xs font-mono font-bold text-emerald-400">8.42</span>
-                    </div>
-                    <div class="mt-2 text-xs font-bold text-white">Austin R&D Campus</div>
-                    <div class="text-[10px] text-emerald-400 font-mono">+140% velocity</div>
-                  </div>
-
-                  <!-- Divider line -->
-                  <div class="h-24 w-px bg-[#1F2937]"></div>
-
-                  <!-- Civic Pulse Marker -->
-                  <div class="relative z-10 text-center cursor-pointer transform hover:scale-105 transition" id="teaser-civic-pin">
-                    <div class="w-12 h-12 mx-auto rounded-full bg-amber-500/20 border-2 border-amber-500 flex items-center justify-center marker-pulse-civic shadow-lg shadow-amber-500/20">
-                      <span class="text-xs font-mono font-bold text-amber-400">8.10</span>
-                    </div>
-                    <div class="mt-2 text-xs font-bold text-white">Austin Drainage Resilience</div>
-                    <div class="text-[10px] text-amber-400 font-mono">Seeded Civic Demo</div>
-                  </div>
-
-                </div>
-
-                <!-- Teaser Card Footer info -->
-                <div class="mt-4 pt-3 text-xs text-[#94A3B8] flex items-center justify-between">
-                  <span>S_emergence calculation active</span>
-                  <button id="teaser-explore-btn" class="text-emerald-400 hover:text-emerald-300 font-medium flex items-center space-x-1 transition">
-                    <span>Inspect Cluster</span>
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-                  </button>
-                </div>
-
-              </div>
-            </div>
-
-          </div>
-        </section>
-
-        <!-- Value Proposition Pillars -->
-        <section class="max-w-7xl mx-auto px-4 lg:px-8 py-12 border-t border-[#1F2937]">
-          <div class="text-center max-w-3xl mx-auto mb-12">
-            <h2 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">Built for Spatio-Temporal Intelligence</h2>
-            <p class="text-sm text-[#94A3B8] mt-2">Combining multi-source spatial clustering algorithms with autonomous collector pipeline reliability.</p>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            
-            <!-- Pillar 1 -->
-            <div class="bg-[#141924] rounded-2xl border border-[#1F2937] p-6 hover:border-emerald-500/40 transition group">
-              <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mb-5 group-hover:scale-110 transition">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A2 2 0 013 15.488V5.512a2 2 0 011.553-1.954L9 2.236l6 3 5.447-2.724A2 2 0 0123 4.464v9.976a2 2 0 01-1.553 1.954L15 19.118l-6-3z"/></svg>
-              </div>
-              <h3 class="text-lg font-bold text-white mb-2">Signal Convergence Engine</h3>
-              <p class="text-sm text-[#94A3B8] leading-relaxed">
-                Works across domains \u2014 from commercial R&D expansion to civic infrastructure shifts \u2014 synthesizing independent public data signals into spatial density indexes.
-              </p>
-            </div>
-
-            <!-- Pillar 2 -->
-            <div class="bg-[#141924] rounded-2xl border border-[#1F2937] p-6 hover:border-indigo-500/40 transition group">
-              <div class="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center text-indigo-400 mb-5 group-hover:scale-110 transition">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
-              </div>
-              <h3 class="text-lg font-bold text-white mb-2">Self-Healing Scraper Pipeline</h3>
-              <p class="text-sm text-[#94A3B8] leading-relaxed">
-                Autonomous DOM drift detection and Gemini LLM schema auto-repair ensure data pipelines never break when public websites alter CSS classes or structural layouts.
-              </p>
-            </div>
-
-            <!-- Pillar 3 -->
-            <div class="bg-[#141924] rounded-2xl border border-[#1F2937] p-6 hover:border-amber-500/40 transition group">
-              <div class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 mb-5 group-hover:scale-110 transition">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-              </div>
-              <h3 class="text-lg font-bold text-white mb-2">Emergence Scoring Math</h3>
-              <p class="text-sm text-[#94A3B8] leading-relaxed">
-                Multi-source density velocity formulas ($S_{emergence}$) rank geographical clusters by confidence level, signal entropy, and recency baseline deltas.
-              </p>
-            </div>
-
-          </div>
-        </section>
-
-        <!-- Footer with Bright Data credit & compliance micro-disclaimer -->
-        <footer class="max-w-7xl mx-auto px-4 lg:px-8 pt-12 pb-6 border-t border-[#1F2937] text-xs text-[#94A3B8]">
-          <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div class="flex items-center space-x-2">
-              <span>Signal Atlas &copy; 2026. Built with Bright Data Web Scraper APIs.</span>
-            </div>
-            <div class="text-center sm:text-right text-[11px] text-gray-500">
-              <span>Not affiliated with any municipal entity \xB7 Data sourced strictly from public listings &amp; registries</span>
-            </div>
-          </div>
-        </footer>
-
-      </div>
-    `;
-      this.attachEvents();
-    }
-    attachEvents() {
-      const ctaMap = this.container.querySelector("#hero-cta-map");
-      const ctaPipeline = this.container.querySelector("#hero-cta-pipeline");
-      const teaserExplore = this.container.querySelector("#teaser-explore-btn");
-      const oppPin = this.container.querySelector("#teaser-opp-pin");
-      if (ctaMap) ctaMap.addEventListener("click", () => this.onNavigate("map", "opportunities"));
-      if (ctaPipeline) ctaPipeline.addEventListener("click", () => this.onNavigate("pipeline", "opportunities"));
-      if (teaserExplore) teaserExplore.addEventListener("click", () => this.onNavigate("map", "opportunities"));
-      if (oppPin) oppPin.addEventListener("click", () => this.onNavigate("map", "opportunities"));
-    }
-  };
-
   // dataset.js
   var OPPORTUNITIES_DATA = [
     {
@@ -1309,6 +836,173 @@
     }
   };
 
+  // selfHealingEngine.js
+  var SelfHealingEngine = class {
+    constructor() {
+      this.status = "HEALTHY";
+      this.activeCollectorsCount = 4;
+      this.uptime = 99.8;
+      this.healedIncidentsCount = 12;
+      this.meanTimeToRepairSeconds = 1.4;
+      this.collectors = [
+        { id: "c1", name: "Bright Data Job Harvester (v2.4)", target: "Public Career Portals", status: "HEALTHY", errorRate: "0.02%", lastSync: "2m ago" },
+        { id: "c2", name: "USPTO Patent Assignment Stream", target: "Federal IP Registry", status: "HEALTHY", errorRate: "0.00%", lastSync: "5m ago" },
+        { id: "c3", name: "Commercial Zoning Harvester", target: "Municipal Permit Portals", status: "HEALTHY", errorRate: "0.01%", lastSync: "1m ago" },
+        { id: "c4", name: "Municipal Council Agenda Harvester", target: "City Clerk PDF Records", status: "HEALTHY", errorRate: "0.00%", lastSync: "12m ago" }
+      ];
+      this.listeners = [];
+      this.logHistory = [
+        { timestamp: this.getTimestamp(), level: "INFO", source: "SYSTEM", message: "Collector pipeline orchestrator online. 4/4 workers active." },
+        { timestamp: this.getTimestamp(), level: "INFO", source: "BRIGHTDATA", message: "Successfully ingested 152 public job listings across target metro areas." },
+        { timestamp: this.getTimestamp(), level: "INFO", source: "CONVERGENCE", message: "Emergence Index recalculation complete. 4 cluster candidates updated." }
+      ];
+      this.brokenPayload = null;
+      this.healedPayload = null;
+    }
+    subscribe(listener) {
+      this.listeners.push(listener);
+      listener(this.getSnapshot());
+      return () => {
+        this.listeners = this.listeners.filter((l) => l !== listener);
+      };
+    }
+    notify() {
+      const snapshot = this.getSnapshot();
+      this.listeners.forEach((l) => l(snapshot));
+    }
+    getSnapshot() {
+      return {
+        status: this.status,
+        activeCollectorsCount: this.activeCollectorsCount,
+        totalCollectorsCount: 4,
+        uptime: this.uptime,
+        healedIncidentsCount: this.healedIncidentsCount,
+        meanTimeToRepairSeconds: this.meanTimeToRepairSeconds,
+        collectors: [...this.collectors],
+        logHistory: [...this.logHistory],
+        brokenPayload: this.brokenPayload,
+        healedPayload: this.healedPayload
+      };
+    }
+    getTimestamp() {
+      const now = /* @__PURE__ */ new Date();
+      return now.toTimeString().split(" ")[0] + "." + String(now.getMilliseconds()).padStart(3, "0");
+    }
+    addLog(level, source, message) {
+      const entry = {
+        timestamp: this.getTimestamp(),
+        level,
+        source,
+        message
+      };
+      this.logHistory.push(entry);
+      if (this.logHistory.length > 80) this.logHistory.shift();
+      this.notify();
+    }
+    /**
+     * Step 1: Simulate Selector Drift / Schema Break
+     * Per Section 2 fix: Holds degraded 🔴 state sitting for 2-3 seconds before repair.
+     */
+    simulateDrift() {
+      if (this.status !== "HEALTHY") return;
+      this.status = "DEGRADED";
+      this.collectors[0].status = "DEGRADED";
+      this.collectors[0].errorRate = "94.2%";
+      this.brokenPayload = {
+        timestamp: (/* @__PURE__ */ new Date()).toISOString(),
+        collector_id: "brightdata_job_harvester_v2",
+        target_url: "https://public-listing-portal.example/jobs/tech-rnd-austin",
+        extracted_fields: {
+          company_name: "Undisclosed Stealth R&D",
+          job_title: "Lead Quantum Hardware Architect",
+          location_raw: null,
+          // ❌ BROKEN SELECTOR NULL
+          posted_date: "2026-08-22",
+          salary_range: "$220,000 - $280,000",
+          department_code: void 0
+          // ❌ MISSING KEY
+        },
+        scraper_error: "DOMSelectorNotFoundError: Selector 'div.legacy-job-card-2024 > span.loc-v1' returned 0 DOM elements.",
+        http_status: 200,
+        validation_status: "FAILED_SCHEMA_CHECK"
+      };
+      this.healedPayload = null;
+      this.addLog("ERROR", "SCRAPER_ENGINE", "CRITICAL: 'brightdata_job_harvester_v2' DOM extraction failed!");
+      this.addLog("WARN", "DOM_INSPECTOR", "Target DOM mutation detected on host public-listing-portal.example");
+      this.addLog("ERROR", "SCHEMA_VALIDATOR", "Validation failed: 'location_raw' is null. Emergence scoring suspended for Austin R&D cluster.");
+      this.notify();
+    }
+    /**
+     * Step 2: Trigger Self-Healing AI Repair Agent
+     */
+    triggerSelfHealing() {
+      if (this.status !== "DEGRADED") return;
+      this.status = "REPAIRING";
+      this.collectors[0].status = "REPAIRING";
+      this.addLog("INFO", "SELF_HEAL_AGENT", "Initiating autonomous DOM repair workflow...");
+      this.notify();
+      setTimeout(() => {
+        this.addLog("DEBUG", "DOM_ANALYZER", "Fetching HTML DOM AST snapshot from latest Bright Data raw stream...");
+      }, 400);
+      setTimeout(() => {
+        this.addLog("INFO", "LLM_INFERENCE", "Prompting Gemini AI agent with broken selector & updated DOM tree...");
+      }, 900);
+      setTimeout(() => {
+        this.addLog("INFO", "SELECTOR_RESOLVER", `AI Agent identified match: modern fallback '[data-testid="job-location-meta"]' (99.4% confidence)`);
+        this.healedPayload = {
+          timestamp: (/* @__PURE__ */ new Date()).toISOString(),
+          collector_id: "brightdata_job_harvester_v2",
+          target_url: "https://public-listing-portal.example/jobs/tech-rnd-austin",
+          extracted_fields: {
+            company_name: "Undisclosed Stealth R&D",
+            job_title: "Lead Quantum Hardware Architect",
+            location_raw: "Austin, TX (78701)",
+            // ✅ REPAIRED & NORMALIZED
+            posted_date: "2026-08-22",
+            salary_range: "$220,000 - $280,000",
+            department_code: "QUANTUM_RD_01"
+            // ✅ INFERRED & POPULATED
+          },
+          healed_by_agent: "Gemini-3.6-DOM-Repair-V2",
+          patch_applied: {
+            deprecated_selector: "div.legacy-job-card-2024 > span.loc-v1",
+            active_selector: '[data-testid="job-location-meta"]',
+            fallback_strategy: "semantic_attribute_match"
+          },
+          http_status: 200,
+          validation_status: "PASSED_AUTO_HEALED"
+        };
+        this.status = "HEALED_UNAPPROVED";
+        this.collectors[0].status = "PATCH_PENDING";
+        this.addLog("SUCCESS", "AUTO_PATCH", "Generated synthetic DOM patch #PAT-2026-0881. Awaiting operator verification.");
+        this.notify();
+      }, 1600);
+    }
+    /**
+     * Step 3: Operator Approves Patch
+     */
+    approvePatch() {
+      if (this.status !== "HEALED_UNAPPROVED") return;
+      this.status = "HEALTHY";
+      this.collectors[0].status = "HEALTHY";
+      this.collectors[0].errorRate = "0.01%";
+      this.healedIncidentsCount += 1;
+      this.addLog("SUCCESS", "ORCHESTRATOR", "Auto-patch #PAT-2026-0881 approved & deployed to Bright Data live scraper pool.");
+      this.addLog("INFO", "CONVERGENCE", "Pipeline re-synced. Emergence score for Austin Quantum Campus restored to 8.42.");
+      this.notify();
+    }
+    reset() {
+      this.status = "HEALTHY";
+      this.collectors[0].status = "HEALTHY";
+      this.collectors[0].errorRate = "0.02%";
+      this.brokenPayload = null;
+      this.healedPayload = null;
+      this.addLog("INFO", "SYSTEM", "Reset self-healing demonstration environment.");
+      this.notify();
+    }
+  };
+  var selfHealingEngine = new SelfHealingEngine();
+
   // PayloadDiffViewer.js
   var PayloadDiffViewer = class {
     constructor(containerId, options = {}) {
@@ -1785,9 +1479,6 @@
   var App = class {
     constructor() {
       this.activeMode = "opportunities";
-      this.activeView = "landing";
-      this.topBar = null;
-      this.landingView = null;
       this.mapView = null;
       this.pipelineView = null;
       this.aboutView = null;
@@ -1798,30 +1489,24 @@
         window.addEventListener("error", (e) => {
           console.error("Signal Atlas Runtime Exception:", e);
         });
-        const mainMount = document.getElementById("main-mount");
-        if (mainMount) {
-          mainMount.innerHTML = `
-          <div id="section-landing" class="min-h-screen relative border-b border-[#1F2937]/50"></div>
-          <div id="section-map" class="min-h-screen relative border-b border-[#1F2937]/50 py-8"></div>
-          <div id="section-pipeline" class="min-h-screen relative border-b border-[#1F2937]/50 py-8"></div>
-          <div id="section-about" class="min-h-screen relative py-8"></div>
-        `;
-          this.landingView = new LandingView("section-landing", {
-            onNavigate: (targetView, targetMode) => this.scrollToSection(targetView, targetMode)
-          });
-          this.mapView = new MapDashboardView("section-map", {
+        const mapMount = document.getElementById("map-section-mount");
+        if (mapMount) {
+          this.mapView = new MapDashboardView("map-section-mount", {
             activeMode: this.activeMode,
-            onNavigate: (targetView, targetMode) => this.scrollToSection(targetView, targetMode)
+            onNavigate: (targetView) => this.scrollToSection(targetView)
           });
-          this.pipelineView = new PipelineHealthView("section-pipeline");
-          this.aboutView = new AboutView("section-about");
         }
-        this.topBar = new TopBar("topbar-mount", {
-          activeView: "landing",
-          activeMode: this.activeMode,
-          onViewChange: (view) => this.scrollToSection(view),
-          onModeChange: (mode) => this.setMode(mode)
-        });
+        const pipelineMount = document.getElementById("pipeline-section-mount");
+        if (pipelineMount) {
+          this.pipelineView = new PipelineHealthView("pipeline-section-mount");
+        }
+        const aboutMount = document.getElementById("about-section-mount");
+        if (aboutMount) {
+          this.aboutView = new AboutView("about-section-mount");
+        }
+        this.initHeroCanvas();
+        this.initCustomCursor();
+        this.initNavigation();
         this.initScrollSpy();
         window.addEventListener("keydown", (e) => {
           if (e.key === "Escape") {
@@ -1833,45 +1518,121 @@
         console.error("App Initialization Error:", err);
       }
     }
-    scrollToSection(view, mode = null) {
-      if (mode) {
-        this.setMode(mode);
-      }
-      const targetEl = document.getElementById(`section-${view}`);
-      if (targetEl) {
-        targetEl.scrollIntoView({ behavior: "smooth" });
-      }
+    initHeroCanvas() {
+      const canvas = document.getElementById("hero-web-canvas");
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      let width, height;
+      let particles = [];
+      const resize = () => {
+        width = canvas.width = canvas.parentElement.clientWidth || window.innerWidth;
+        height = canvas.height = canvas.parentElement.clientHeight || window.innerHeight;
+        createParticles();
+      };
+      const createParticles = () => {
+        particles = [];
+        const numParticles = Math.floor(width * height / 12e3);
+        for (let i = 0; i < numParticles; i++) {
+          particles.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            vx: (Math.random() - 0.5) * 0.8,
+            vy: (Math.random() - 0.5) * 0.8,
+            radius: Math.random() * 2 + 1
+          });
+        }
+      };
+      window.addEventListener("resize", resize);
+      resize();
+      let mouse = { x: -1e3, y: -1e3 };
+      window.addEventListener("mousemove", (e) => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+      });
+      const animate = () => {
+        ctx.clearRect(0, 0, width, height);
+        for (let i = 0; i < particles.length; i++) {
+          const p = particles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          if (p.x < 0 || p.x > width) p.vx *= -1;
+          if (p.y < 0 || p.y > height) p.vy *= -1;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fillStyle = "rgba(227, 38, 46, 0.6)";
+          ctx.fill();
+          for (let j = i + 1; j < particles.length; j++) {
+            const p2 = particles[j];
+            const dx = p.x - p2.x;
+            const dy = p.y - p2.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 120) {
+              ctx.beginPath();
+              ctx.moveTo(p.x, p.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.strokeStyle = `rgba(227, 38, 46, ${0.35 * (1 - dist / 120)})`;
+              ctx.lineWidth = 0.8;
+              ctx.stroke();
+            }
+          }
+        }
+        requestAnimationFrame(animate);
+      };
+      animate();
     }
-    setMode(mode) {
-      this.activeMode = mode;
-      if (this.topBar) {
-        this.topBar.update(this.activeView, this.activeMode);
-      }
-      if (this.mapView && typeof this.mapView.setMode === "function") {
-        this.mapView.setMode(mode);
+    initCustomCursor() {
+      const cursor = document.getElementById("custom-cursor");
+      if (!cursor) return;
+      window.addEventListener("mousemove", (e) => {
+        cursor.style.left = `${e.clientX}px`;
+        cursor.style.top = `${e.clientY}px`;
+      });
+    }
+    initNavigation() {
+      const targets = document.querySelectorAll("[data-target]");
+      targets.forEach((el) => {
+        el.addEventListener("click", (e) => {
+          e.preventDefault();
+          const targetId = el.getAttribute("data-target");
+          this.scrollToSection(targetId);
+        });
+      });
+    }
+    scrollToSection(sectionId) {
+      const el = document.getElementById(sectionId);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
       }
     }
     initScrollSpy() {
-      const sections = [
-        { id: "section-landing", name: "landing" },
-        { id: "section-[#section-landing]", name: "landing" },
-        { id: "section-map", name: "map" },
-        { id: "section-pipeline", name: "pipeline" },
-        { id: "section-about", name: "about" }
-      ];
+      const sections = ["scene-01", "scene-02", "scene-03", "scene-04"];
+      const navItems = document.querySelectorAll(".nav-link-item");
+      const dots = document.querySelectorAll(".indicator-dot");
+      const updateActiveState = (activeId) => {
+        navItems.forEach((item) => {
+          if (item.getAttribute("data-target") === activeId) {
+            item.classList.add("active");
+          } else {
+            item.classList.remove("active");
+          }
+        });
+        dots.forEach((dot) => {
+          if (dot.getAttribute("data-target") === activeId) {
+            dot.classList.add("active");
+          } else {
+            dot.classList.remove("active");
+          }
+        });
+      };
       const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            const matched = sections.find((s) => s.id === entry.target.id);
-            if (matched && this.topBar) {
-              this.activeView = matched.name;
-              this.topBar.update(matched.name, this.activeMode);
-            }
+            updateActiveState(entry.target.id);
           }
         });
-      }, { threshold: 0.2 });
-      sections.forEach((s) => {
-        const el = document.getElementById(s.id);
+      }, { threshold: 0.3 });
+      sections.forEach((id) => {
+        const el = document.getElementById(id);
         if (el) observer.observe(el);
       });
     }
